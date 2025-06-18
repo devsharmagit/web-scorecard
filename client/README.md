@@ -1,54 +1,88 @@
-# React + TypeScript + Vite
+# Web Scorecard - PageSpeed Analysis Components
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project provides a comprehensive web performance analysis tool using Google's PageSpeed Insights API.
 
-Currently, two official plugins are available:
+## Components Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Main Components
 
-## Expanding the ESLint configuration
+#### `PageSpeedResults.tsx`
+The main container component that displays PageSpeed analysis results in organized tabs:
+- **Mobile Tab**: Shows mobile-specific performance metrics and insights
+- **Desktop Tab**: Shows desktop-specific performance metrics and insights  
+- **SEO Tab**: Shows SEO analysis and recommendations
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+#### `MobileResults.tsx`
+Displays mobile performance analysis including:
+- Overall performance scores (Performance, Accessibility, Best Practices, SEO)
+- Real User Experience metrics (CrUX data)
+- Core Web Vitals
+- Key performance issues and opportunities
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+#### `DesktopResults.tsx`
+Displays desktop performance analysis including:
+- Overall performance scores
+- Core Web Vitals metrics
+- Real User Experience data
+- Performance optimization opportunities
+
+#### `SEOResults.tsx`
+Displays comprehensive SEO analysis including:
+- Overall SEO score
+- Audit summary (Passed, Needs Improvement, Failed, Not Applicable)
+- Critical issues and areas for improvement
+- Good practices
+- SEO recommendations
+
+## Features
+
+### Performance Metrics
+- **First Contentful Paint (FCP)**: Time to first content render
+- **Largest Contentful Paint (LCP)**: Time to largest content render
+- **First Input Delay (FID)**: Time to first user interaction
+- **Cumulative Layout Shift (CLS)**: Visual stability metric
+
+### SEO Analysis
+- Document title optimization
+- Meta description quality
+- Image alt text
+- Link text quality
+- HTTPS usage
+- Mobile responsiveness
+- And many more SEO factors
+
+### User Experience
+- Real user data from Chrome User Experience Report (CrUX)
+- Performance categorization (Fast, Average, Slow)
+- Loading experience metrics
+
+## Usage
+
+```tsx
+import PageSpeedResults from './components/PageSpeedResults';
+
+// In your component
+<PageSpeedResults 
+  mobileData={mobilePageSpeedData} 
+  desktopData={desktopPageSpeedData} 
+/>
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## API Integration
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The components work with Google's PageSpeed Insights API v5. The API response should include:
+- `lighthouseResult.categories`: Performance, Accessibility, Best Practices, SEO scores
+- `lighthouseResult.audits`: Detailed audit results
+- `loadingExperience`: Real user experience metrics
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Styling
+
+Components use Tailwind CSS for styling with a consistent color scheme:
+- Green: Good scores and passed audits
+- Yellow: Needs improvement
+- Red: Poor scores and failed audits
+- Blue: Information and recommendations
+
+## TypeScript Support
+
+All components are fully typed with TypeScript interfaces defined in `src/types/pagespeed.ts`.

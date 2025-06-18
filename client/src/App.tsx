@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import Dashboard from './page/Dashboard';
 import Layout from './page/Layout';
+import PageSpeedScores from './page/Testpage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/dashboard" element={<Layout />}>
           <Route index element={<Dashboard />} />
+          <Route path="test" element={<PageSpeedScores />} />
         </Route>
         <Route path="/" element={<Navigate to="/dashboard" />} />
       </Routes>
