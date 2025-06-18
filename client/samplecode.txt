@@ -1,0 +1,63 @@
+private readonly API_KEY = 'AIzaSyBzJvs04SfVeePcm6QkVuR2U8GMHbkU_Ok';
+  private readonly BASE_URL = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed';
+  private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+  private readonly REQUEST_TIMEOUT = 45000; // 45 seconds
+  
+  private cache = new Map<string, { data: any; timestamp: number }>();
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  public loading$ = this.loadingSubject.asObservable();
+
+  constructor(private http: HttpClient) {}
+
+  /**
+   * Get comprehensive analysis matching the screenshots
+   */
+  getComprehensiveAnalysis(url: string): Observable<ComprehensivePageSpeedResult> {
+    const cacheKey = comprehensive_${url};
+    const cached = this.getFromCache(cacheKey);
+    
+    if (cached) {
+      return of(cached);
+    }
+
+    this.loadingSubject.next(true);
+    
+    const mobileRequest = this.getDetailedInsights(url, 'mobile');
+    const desktopRequest = this.getDetailedInsights(url, 'desktop');
+
+    return forkJoin({
+      mobile: mobileRequest,
+      desktop: desktopRequest
+    }).pipe(
+      timeout(this.REQUEST_TIMEOUT),
+      map(results => this.formatComprehensiveResults(url, results)),
+      tap(results => {
+        this.setCache(cacheKey, results);
+        this.loadingSubject.next(false);
+      }),
+      catchError(error => {
+        this.loadingSubject.next(false);
+        console.error('Error fetching comprehensive analysis:', error);
+        return throwError(() => error);
+      }),
+      shareReplay(1)
+    );
+  }
+
+  private getDetailedInsights(url: string, strategy: 'mobile' | 'desktop'): Observable<any> {
+    const params = new HttpParams()
+      .set('url', url)
+      .set('key', this.API_KEY)
+      .set('strategy', strategy)
+      .set('category', 'PERFORMANCE')
+      .set('category', 'ACCESSIBILITY')
+      .set('category', 'BEST_PRACTICES')
+      .set('category', 'SEO')
+      .set('locale', 'en');
+
+    return this.http.get<any>(this.BASE_URL, { params })
+      .pipe(
+        timeout(40000),
+        retry(1)
+      );
+  }
