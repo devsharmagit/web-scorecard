@@ -1,4 +1,3 @@
-import React from 'react';
 import { getGrade, getGradeColor, getRatingStatus, getStatusColor } from '../constants/grading';
 import { Loader2 } from 'lucide-react';
 
