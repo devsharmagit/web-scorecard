@@ -77,21 +77,25 @@ const PageSpeedResults = ({ url }: { url: string }) => {
     ] as const;
 
     return (
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+        <div className="">
+            <div className="text-left mb-8">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Website Scorecard</h2>
+          </div>
             <MainResult url={url} loading={mobileLoading || desktopLoading} averageScore={avgScore} />
 
             {/* Tab Navigation */}
-            <div className="flex border-b border-gray-200 bg-gray-50">
+            <div className='px-10'>
+<div className="flex bg-gray-50 text-center">
                 {tabs.map(tab => (
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={`
-              flex items-center gap-2 px-6 py-4 text-sm font-medium transition-all duration-200
+              flex flex-1 justify-center cursor-pointer items-center gap-2 px-6 py-4 text-sm transition-all duration-200
               ${
                   activeTab === tab.id
-                      ? 'bg-white text-blue-600 border-b-2 border-blue-600 -mb-px'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? 'bg-white border-b-2 border-[#799F92]  font-semibold '
+                      : 'text-gray-600 border-b-2 border-gray-50 hover:text-gray-900 hover:bg-gray-100'
               }
             `}
                     >
@@ -99,9 +103,11 @@ const PageSpeedResults = ({ url }: { url: string }) => {
                     </button>
                 ))}
             </div>
+            </div>
+            
 
             {/* Tab Content - All tabs are mounted but only active one is visible */}
-            <div className="p-6">
+            <div className="p-6 px-10">
                 <div
                     className={`${activeTab === 'mobile' ? 'block' : 'hidden'}`}
                 >

@@ -1,6 +1,6 @@
-import React from 'react'
+import { getGrade } from '../../constants/grading';
 import type { PageSpeedData } from '../../types/pagespeed';
-import { AlertTriangle, CheckCircle, Loader2, Search, TrendingUp, XCircle } from 'lucide-react';
+import {Loader2 } from 'lucide-react';
 
 interface SEOTabProps {
   data: PageSpeedData | null; // Allow data to be null initially
@@ -13,8 +13,7 @@ const SEOTab = ({ data, loading }: SEOTabProps) => {
     return (
       <div className="flex items-center justify-center py-12">
         <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
-
-        <span className="ml-2 text-gray-600">Analyzing mobile performance...</span>
+        <span className="ml-2 text-gray-600">Analyzing SEO metrics...</span>
       </div>
     );
   }
@@ -22,7 +21,7 @@ const SEOTab = ({ data, loading }: SEOTabProps) => {
   if (!data?.lighthouseResult) {
     return (
       <div className="text-center text-gray-500 py-8">
-        No performance data available
+        No SEO data available
       </div>
     );
   }
@@ -31,17 +30,10 @@ const SEOTab = ({ data, loading }: SEOTabProps) => {
   const { categories, audits } = lighthouseResult;
 
   const getScoreColor = (score: number) => {
-    if (score >= 0.9) return 'text-green-600';
-    if (score >= 0.5) return 'text-yellow-600';
+    if (score >= 0.9) return 'text-[#799F92]';
+    if (score >= 0.5) return 'text-[#fa3]';
     return 'text-red-600';
   };
-
-  const getScoreLabel = (score: number) => {
-    if (score >= 0.9) return 'Good';
-    if (score >= 0.5) return 'Needs Improvement';
-    return 'Poor';
-  };
-
 
   // SEO-specific audits
   const seoAudits = [
@@ -91,64 +83,41 @@ const SEOTab = ({ data, loading }: SEOTabProps) => {
   const passedAudits = seoAuditResults.filter(audit => audit?.score !== null && audit.score >= 0.9);
   const needsImprovementAudits = seoAuditResults.filter(audit => audit?.score !== null && audit.score >= 0.5 && audit.score < 0.9);
   const failedAudits = seoAuditResults.filter(audit => audit?.score !== null && audit.score < 0.5);
-  const notApplicableAudits = seoAuditResults.filter(audit => audit?.score === null);
-
-  console.log({passedAudits, needsImprovementAudits, failedAudits, notApplicableAudits});
 
   return (
-    <div className="space-y-6">
-
-      {/* Overall SEO Score */}
-      <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6">
-        <div className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Search className="w-8 h-8 text-orange-600" />
-            <h4 className="text-xl font-bold text-orange-900">Overall SEO Score</h4>
-          </div>
-          <div className={`text-4xl font-bold ${getScoreColor(categories.seo.score)} mb-2`}>
-            {Math.round(categories.seo.score * 100)}
-          </div>
-          <div className="text-lg text-orange-700 font-medium">
-            {getScoreLabel(categories.seo.score)}
+    <div className="mx-auto bg-white">
+      {/* Header with overall score */}
+      <div className="flex items-center justify-between mb-8 py-10">
+        <div className="flex-1">
+          <div className="flex flex-col justify-center items-center gap-2">
+            <div className={`text-6xl font-semibold text-gray-900`}>
+              {getGrade(Math.round(categories.seo.score * 100))}
+            </div>
+            <h1 className="text-xl font-bold text-gray-900">Search Engine Optimization Score</h1>
+            <p className="text-gray-600 text-sm max-w-xl text-center">
+              Measures the effectiveness of your website’s optimization for search engines, impacting visibility and organic traffic generation.
+            </p>
           </div>
         </div>
-      </div>
-
-      {/* Audit Summary */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-green-50 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-green-600 mb-1">{passedAudits.length}</div>
-          <div className="text-sm text-green-700 font-medium">Passed</div>
-        </div>
-        <div className="bg-yellow-50 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-yellow-600 mb-1">{needsImprovementAudits.length}</div>
-          <div className="text-sm text-yellow-700 font-medium">Needs Improvement</div>
-        </div>
-        <div className="bg-red-50 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-red-600 mb-1">{failedAudits.length}</div>
-          <div className="text-sm text-red-700 font-medium">Failed</div>
-        </div>
-        <div className="bg-blue-50 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-blue-600 mb-1">{notApplicableAudits.length}</div>
-          <div className="text-sm text-blue-700 font-medium">Not Applicable</div>
-        </div>
+      
       </div>
 
       {/* Failed Audits - High Priority */}
       {failedAudits.length > 0 && (
-        <div className="bg-red-50 rounded-xl p-6">
-          <h4 className="text-lg font-semibold text-red-900 mb-4 flex items-center gap-2">
-            <XCircle className="w-5 h-5" />
-            Critical Issues ({failedAudits.length})
-          </h4>
+        <div className="bg-white rounded-sm px-4 mb-6">
+          <div className="flex items-center gap-3 mb-4">
+            <h3 className="font-semibold text-xl text-gray-900">Critical SEO Issues</h3>
+            <span className="px-2 py-1 rounded text-sm font-medium bg-red-100 text-red-800">
+              {failedAudits.length} Issues
+            </span>
+          </div>
           <div className="space-y-3">
             {failedAudits.map((audit) => (
               <div key={audit?.key} className="bg-white p-4 rounded-lg border border-red-200">
                 <div className="flex items-start gap-3">
-                  <XCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
-                    <div className="font-medium text-red-900 mb-1">{audit?.title}</div>
-                    <div className="text-sm text-red-700">{audit?.description}</div>
+                    <div className="font-medium text-gray-900 mb-1">{audit?.title}</div>
+                    <div className="text-sm text-gray-700">{audit?.description}</div>
                     {audit?.displayValue && (
                       <div className="text-xs text-red-600 mt-1 font-medium">
                         Impact: {audit.displayValue}
@@ -162,23 +131,24 @@ const SEOTab = ({ data, loading }: SEOTabProps) => {
         </div>
       )}
 
-      {/* Needs Improvement Audits - Medium Priority */}
+      {/* Needs Improvement Audits */}
       {needsImprovementAudits.length > 0 && (
-        <div className="bg-yellow-50 rounded-xl p-6">
-          <h4 className="text-lg font-semibold text-yellow-900 mb-4 flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5" />
-            Areas for Improvement ({needsImprovementAudits.length})
-          </h4>
+        <div className="bg-white rounded-sm px-4 mb-6">
+          <div className="flex items-center gap-3 mb-4">
+            <h3 className="font-semibold text-xl text-gray-900">Areas for Improvement</h3>
+            <span className="px-2 py-1 rounded text-sm font-medium bg-[#fa3] text-white">
+              {needsImprovementAudits.length} Items
+            </span>
+          </div>
           <div className="space-y-3">
             {needsImprovementAudits.map((audit) => (
-              <div key={audit?.key} className="bg-white p-4 rounded-lg border border-yellow-200">
+              <div key={audit?.key} className="bg-white p-4 rounded-lg border border-[#fa3]">
                 <div className="flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
-                    <div className="font-medium text-yellow-900 mb-1">{audit?.title}</div>
-                    <div className="text-sm text-yellow-700">{audit?.description}</div>
+                    <div className="font-medium text-gray-900 mb-1">{audit?.title}</div>
+                    <div className="text-sm text-gray-700">{audit?.description}</div>
                     {audit?.displayValue && (
-                      <div className="text-xs text-yellow-600 mt-1 font-medium">
+                      <div className="text-xs text-gray-600 mt-1 font-medium">
                         Impact: {audit.displayValue}
                       </div>
                     )}
@@ -190,21 +160,22 @@ const SEOTab = ({ data, loading }: SEOTabProps) => {
         </div>
       )}
 
-      {/* Passed Audits - Good Practices */}
+      {/* Passed Audits */}
       {passedAudits.length > 0 && (
-        <div className="bg-green-50 rounded-xl p-6">
-          <h4 className="text-lg font-semibold text-green-900 mb-4 flex items-center gap-2">
-            <CheckCircle className="w-5 h-5" />
-            Good Practices ({passedAudits.length})
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="bg-white rounded-sm px-4 mb-6">
+          <div className="flex items-center gap-3 mb-4">
+            <h3 className="font-semibold text-xl text-gray-900">Optimized Elements</h3>
+            <span className="px-2 py-1 rounded text-sm font-medium bg-[#799F92] text-white">
+              {passedAudits.length} Passed
+            </span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {passedAudits.map((audit) => (
-              <div key={audit?.key} className="bg-white p-4 rounded-lg border border-green-200">
+              <div key={audit?.key} className="bg-white p-4 rounded-lg border border-[#799F92]">
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
-                    <div className="font-medium text-green-900 mb-1">{audit?.title}</div>
-                    <div className="text-sm text-green-700">{audit?.description}</div>
+                    <div className="font-medium text-gray-900 mb-1">{audit?.title}</div>
+                    <div className="text-sm text-gray-700">{audit?.description}</div>
                   </div>
                 </div>
               </div>
@@ -213,44 +184,20 @@ const SEOTab = ({ data, loading }: SEOTabProps) => {
         </div>
       )}
 
-      {/* SEO Recommendations */}
-      <div className="bg-blue-50 rounded-xl p-6">
-        <h4 className="text-lg font-semibold text-blue-900 mb-4 flex items-center gap-2">
-          <TrendingUp className="w-5 h-5" />
-          SEO Recommendations
-        </h4>
-        <div className="space-y-3">
-          {failedAudits.length > 0 && (
-            <div className="bg-white p-4 rounded-lg border border-blue-200">
-              <div className="font-medium text-blue-900 mb-2">Priority Actions:</div>
-              <ul className="text-sm text-blue-700 space-y-1">
-                {failedAudits.slice(0, 3).map((audit) => (
-                  <li key={audit?.key} className="flex items-start gap-2">
-                    <span className="text-blue-600">•</span>
-                    <span>Fix {audit?.title.toLowerCase()}</span>
-                  </li>
-                ))}
-              </ul>
+      {/* Overall SEO Score */}
+      <div className="mt-8 p-4 bg-gray-50 rounded-lg">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-600">Overall SEO Score</span>
+          <div className="flex items-center gap-2">
+            <div className={`text-2xl font-bold ${getScoreColor(categories.seo.score)}`}>
+              {Math.round(categories.seo.score * 100)}
             </div>
-          )}
-          
-          {needsImprovementAudits.length > 0 && (
-            <div className="bg-white p-4 rounded-lg border border-blue-200">
-              <div className="font-medium text-blue-900 mb-2">Optimization Opportunities:</div>
-              <ul className="text-sm text-blue-700 space-y-1">
-                {needsImprovementAudits.slice(0, 3).map((audit) => (
-                  <li key={audit?.key} className="flex items-start gap-2">
-                    <span className="text-blue-600">•</span>
-                    <span>Improve {audit?.title.toLowerCase()}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+            <div className="text-sm text-gray-500">/ 100</div>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-export default SEOTab
+export default SEOTab;

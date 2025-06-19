@@ -15,8 +15,8 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#f9f9f9] via-[#f1fdfb] to-[#e9f7f5]">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="min-h-[90vh] bg-gradient-to-br from-[#f9f9f9] via-[#f1fdfb] to-[#e9f7f5] px-4 py-4">
+            <div className="h-full min-h-[90vh] mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white rounded-2xl shadow-xl border border-gray-100">
                 {/* URL Input Section */}
                 {!showResult && 
                 <InputForm

@@ -1,5 +1,5 @@
-import { Globe } from 'lucide-react'
 import React, { useState } from 'react'
+import dashboarImg from "../assets/dashboard-monitor.png"
 
 interface InputFormProps {
   urlInput: string;
@@ -20,34 +20,30 @@ const InputForm = ({urlInput, setUrlInput, handleAnalyze}: InputFormProps) => {
         setUrlInput(newUrl);
       };
   return (
-     <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-[#e0f2ee] rounded-2xl mb-4">
-              <Globe className="w-8 h-8 text-[#92c0b2]" />
-            </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Website Performance Analyzer</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Unlock valuable insights into your website's performance with our comprehensive analytics report. 
-              Monitor key metrics such as page load speed, SEO score, traffic sources, and user engagement.
-            </p>
+     <div className="">
+          <div className="text-left mb-8">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Website Scorecard</h2>
           </div>
-
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-xl mx-auto text-center">
+              <img src={dashboarImg} alt="Dashboard" className="w-[90px] h-[90px] mx-auto mb-4" />
             <div className="relative">
               <input
                 type="url"
                 value={urlInput}
                 onChange={handleUrlChange}
                 placeholder="Enter a web page URL here"
-                className="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-[#92c0b2]/30 focus:border-[#92c0b2] transition-all duration-200"
+                className="w-full px-3 py-2 text-sm border-2 border-gray-200 rounded-sm focus:shadow  transition-all duration-200"
               />
-              <Globe className="absolute right-4 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-400" />
             </div>
+            <p className=" text-sm text-black font-semibold mt-4">
+              Unlock valuable insights into your website's performance with our comprehensive analytics report. 
+              Monitor key metrics such as page load speed, SEO score, traffic sources, and user engagement.
+            </p>
 
             <button
               onClick={handleAnalyze}
               disabled={isUrlValid ? false : true}
-              className="w-full mt-6 bg-[#92c0b2] hover:bg-[#7bb5a4] disabled:bg-gray-400 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-200 transform hover:scale-105 disabled:hover:scale-100 shadow-lg hover:shadow-xl"
+              className=" mt-6 bg-[#1F2F2F] hover:bg-[#799f92] hover:shadow-2xl text-white font-semibold py-2 px-6 rounded-full transition-all duration-200  text-xs mx-auto "
             >
               CLICK HERE FOR SCORECARD!
             </button>
