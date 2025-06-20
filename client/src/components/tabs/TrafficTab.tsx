@@ -1,9 +1,121 @@
-import React from 'react'
+import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 
-const TrafficTab = () => {
+function TrafficTab({ trafficData }: { trafficData: any | null }) {
+  if (!trafficData) {
+    return <div className="mx-auto bg-white">No Traffic Data Available...</div>;
+  }
+
+  const { previousMonthTraffic, traffic } = trafficData;
+  
+  // Calculate trend percentage
+  const calculateTrend = () => {
+    if (!previousMonthTraffic || previousMonthTraffic === 0) {
+      return 0;
+    }
+    return ((traffic - previousMonthTraffic) / previousMonthTraffic) * 100;
+  };
+
+  // Generate dynamic comparison date range
+  const generateComparisonDates = () => {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth(); // 0-based (0 = January, 5 = June)
+    
+    // Calculate the previous two months
+    const endMonth = currentMonth - 1; // Last month
+    const startMonth = currentMonth - 2; // Two months ago
+    
+    // Handle year rollover
+    let startYear = currentYear;
+    let endYear = currentYear;
+    
+    let adjustedStartMonth = startMonth;
+    let adjustedEndMonth = endMonth;
+    
+    if (startMonth < 0) {
+      adjustedStartMonth = 12 + startMonth; // Convert negative to previous year months
+      startYear = currentYear - 1;
+    }
+    
+    if (endMonth < 0) {
+      adjustedEndMonth = 12 + endMonth;
+      endYear = currentYear - 1;
+    }
+    
+    // Month names
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    
+    // Get last day of end month
+    const lastDayOfEndMonth = new Date(endYear, adjustedEndMonth + 1, 0).getDate();
+    
+    const startMonthName = monthNames[adjustedStartMonth];
+    const endMonthName = monthNames[adjustedEndMonth];
+    
+    return `${startMonthName} 1, ${startYear} to ${endMonthName} ${lastDayOfEndMonth}, ${endYear}`;
+  };
+
+  const trend = calculateTrend();
+  
+  // Create leadItem object with calculated trend and dynamic comparison
+  const leadItem = {
+    trend: trend,
+    comparison: generateComparisonDates()
+  };
+
+  // Determine badge color and icon based on trend
+  let badgeColor = '';
+  let Icon = Minus;
+  if (leadItem.trend > 0) {
+    badgeColor = 'text-[#799F92] bg-green-50';
+    Icon = ArrowUpRight;
+  } else if (leadItem.trend < 0) {
+    badgeColor = 'bg-red-100 text-red-700';
+    Icon = ArrowDownRight;
+  } else {
+    badgeColor = 'bg-orange-100 text-orange-700';
+    Icon = Minus;
+  }
+
   return (
-    <div>TrafficTab</div>
-  )
+    <div className="bg-white mx-auto ">
+      <div className="flex items-center justify-between mb-8 py-10">
+        <div className="flex-1">
+          <div className="flex flex-col justify-center items-center gap-2">
+            <h1 className="text-xl font-bold text-gray-900">Traffic Information</h1>
+            <p className="text-gray-600 text-sm max-w-xl text-center">
+              Reflects the volume of visitors to your website, providing insight into its online reach and audience engagement.
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div className="flex items-center max-w-[350px] mx-auto justify-between h-full p-4 border border-[#799F92] rounded-lg">
+        {/* Value and Label */}
+        <div className="flex flex-col items-start gap-1">
+          <h3 className="font-semibold text-4xl text-gray-800 leading-none">
+            {trafficData.traffic.toLocaleString()}
+          </h3>
+          <p className="font-semibold text-sm text-gray-900">
+            Total traffic
+          </p>
+        </div>
+        
+        {/* Trend Badge */}
+        <div className="flex flex-col items-end gap-1 ml-4">
+          <span className={`flex items-center gap-1 px-2 py-1 rounded ${badgeColor} font-semibold text-sm`}>
+            {leadItem.trend !== 0 && <Icon className="w-4 h-4" />}
+            {Math.abs(leadItem.trend).toFixed(1)}%
+          </span>
+          <span className="text-xs text-gray-500 font-semibold text-right max-w-[110px] leading-tight">
+            {leadItem.comparison}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default TrafficTab
+export default TrafficTab;

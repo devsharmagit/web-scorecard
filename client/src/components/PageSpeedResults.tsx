@@ -8,6 +8,8 @@ import SecurityTab from './tabs/SecurityTab';
 import MainResult from './MainResult';
 import { getMobileScore, getDesktopScore } from '../services/api/api-functions';
 import type { PageSpeedData } from '../types/pagespeed';
+import BasicSEO from './BasicSEO';
+import axios from 'axios';
 
 const PageSpeedResults = ({ url }: { url: string }) => {
     const [activeTab, setActiveTab] = useState<
@@ -19,6 +21,12 @@ const PageSpeedResults = ({ url }: { url: string }) => {
     const [desktopData, setDesktopData] = useState<PageSpeedData | null>(null);
     const [mobileLoading, setMobileLoading] = useState(true);
     const [desktopLoading, setDesktopLoading] = useState(true);
+    const [leadData, setLeadData] = useState<any>(null);
+    const [leadLoading, setLeadLoading] = useState(true);
+    const [trafficData, setTrafficData] = useState<any>(null);
+    const [trafficLoading, setTrafficLoading] = useState(true);
+
+    const [isEliteClient, setIsEliteClient] = useState<boolean>(false);
 
     const [avgScore, setAvgScore] = useState<number>(0);
 
@@ -55,6 +63,8 @@ const PageSpeedResults = ({ url }: { url: string }) => {
         fetchData();
     }, [url]);
 
+
+
     useEffect(() =>{
       if(mobileData && desktopData) {
         const mobileScore = mobileData.lighthouseResult.categories.performance.score * 100;
@@ -66,6 +76,48 @@ const PageSpeedResults = ({ url }: { url: string }) => {
         setAvgScore(average);
       }
     }, [mobileData, desktopData]);
+
+    useEffect(()=>{
+        const fetchLeadData = async () => {
+            try {
+                setLeadLoading(true);
+                const response = await axios.post('http://localhost:3000/lead', { url });
+                if(response && response.data) {
+                    // Handle lead data if needed
+                    console.log('Lead Data:', response.data);
+                    setLeadData(response.data.analytics);
+                }
+            } catch (error) {
+                console.log(error)
+            }finally{
+                setLeadLoading(false);
+            }
+            
+        }
+        fetchLeadData()
+    }, [url])
+
+
+      useEffect(()=>{
+        const fetchLeadData = async () => {
+            try {
+                setTrafficLoading(true);
+                const response = await axios.post('http://localhost:3000/traffic', { url });
+                if(response && response.data.data.traffic !== 'NA') {
+                    // Handle lead data if needed
+                    console.log('Lead Data:', response.data.data);
+                    setTrafficData(response.data.data);
+                    setIsEliteClient(response.data.data.plan === 'Growth Elite');
+                }
+            } catch (error) {
+                console.log(error)
+            }finally{
+                setTrafficLoading(false);
+            }
+            
+        }
+        fetchLeadData()
+    }, [url])
 
     const tabs = [
         { id: 'mobile', label: 'Mobile' },
@@ -97,6 +149,8 @@ const PageSpeedResults = ({ url }: { url: string }) => {
                       ? 'bg-white border-b-2 border-[#799F92]  font-semibold '
                       : 'text-gray-600 border-b-2 border-gray-50 hover:text-gray-900 hover:bg-gray-100'
               }
+              ${ tab.id === 'lead'  && !leadData ? 'hidden' : 'flex' }
+              ${ tab.id === 'traffic'  && !trafficData ? 'hidden' : 'flex' }
             `}
                     >
                         {tab.label}
@@ -111,33 +165,38 @@ const PageSpeedResults = ({ url }: { url: string }) => {
                 <div
                     className={`${activeTab === 'mobile' ? 'block' : 'hidden'}`}
                 >
-                    <MobileTab data={mobileData} loading={mobileLoading} />
+                    <MobileTab data={mobileData} loading={mobileLoading} isEliteClient={isEliteClient} />
                 </div>
 
                 <div
                     className={`${activeTab === 'desktop' ? 'block' : 'hidden'}`}
                 >
-                    <DesktopTab data={desktopData} loading={desktopLoading} />
+                    <DesktopTab data={desktopData} loading={desktopLoading} isEliteClient={isEliteClient} />
                 </div>
 
                 <div className={`${activeTab === 'seo' ? 'block' : 'hidden'}`}>
-                    <SEOTab data={mobileData} loading={mobileLoading} />
+                    <SEOTab data={desktopData} loading={mobileLoading} />
+                    <BasicSEO url={url} />
                 </div>
-
-                <div
+{
+    trafficData && <div
                     className={`${activeTab === 'traffic' ? 'block' : 'hidden'}`}
                 >
-                    <TrafficTab />
+                    <TrafficTab trafficData={trafficData} />
                 </div>
-
-                <div className={`${activeTab === 'lead' ? 'block' : 'hidden'}`}>
-                    <LeadTab />
+}
+                
+{
+    leadData &&  <div className={`${activeTab === 'lead' ? 'block' : 'hidden'}`}>
+                    <LeadTab leadData={leadData} loading={leadLoading}  />
                 </div>
+}
+               
 
                 <div
                     className={`${activeTab === 'security' ? 'block' : 'hidden'}`}
                 >
-                    <SecurityTab />
+                    <SecurityTab url={url} />
                 </div>
             </div>
         </div>

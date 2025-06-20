@@ -1,0 +1,35 @@
+
+.serp-preview {
+    padding: 20px;
+    background: #fff;
+    margin-left: 0;
+    margin-top: 10px;
+}
+.serp-preview > div {
+    position: relative;
+    z-index: 1;
+    display: block;
+    overflow: hidden;
+    max-width: 630px;
+    margin: 0;
+}
+.serp-preview .serp-url {
+    font-size: 14px;
+    line-height: 16px;
+    margin: 3px 0 5px;
+    color: #006621;
+}
+.serp-title {
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 22px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #1a0dab;
+}
+.serp-description {
+    font-size: 13px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    color: #545454;
+}
