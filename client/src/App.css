@@ -1,4 +1,6 @@
-
+* {
+    font-family: 'Figtree', sans-serif;
+}
 .serp-preview {
     padding: 20px;
     background: #fff;
@@ -32,4 +34,42 @@
     line-height: 1.4;
     word-wrap: break-word;
     color: #545454;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+table, th, td {
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+td{
+    text-wrap: wrap;
+    font-size: 16px;
+    color: #1F2F2F;
+}
+td a{
+    text-wrap: wrap;
+    font-size: 16px;
+    color: #1F2F2F;
+}
+table thead {
+    background-color: #799f92;
+    text-align: left;
+    border: none;
+    color: #fff;
+}
+table thead th {
+    padding: 10px 15px;
+    color: #fff;
+    min-width: 200px;
+    font-weight: 600;
+}
+table tbody td {
+    padding: 8px;
+}
+tbody tr:nth-child(2n),
+table tbody tr:nth-child(2n) {
+    background-color: #f1f1f1;
 }

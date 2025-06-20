@@ -16,7 +16,6 @@ const PageSpeedResults = ({ url }: { url: string }) => {
         'mobile' | 'desktop' | 'seo' | 'traffic' | 'lead' | 'security'
     >('mobile');
 
-
     const [mobileData, setMobileData] = useState<PageSpeedData | null>(null);
     const [desktopData, setDesktopData] = useState<PageSpeedData | null>(null);
     const [mobileLoading, setMobileLoading] = useState(true);
@@ -24,7 +23,6 @@ const PageSpeedResults = ({ url }: { url: string }) => {
     const [leadData, setLeadData] = useState<any>(null);
     const [leadLoading, setLeadLoading] = useState(true);
     const [trafficData, setTrafficData] = useState<any>(null);
-    const [trafficLoading, setTrafficLoading] = useState(true);
 
     const [isEliteClient, setIsEliteClient] = useState<boolean>(false);
 
@@ -63,61 +61,64 @@ const PageSpeedResults = ({ url }: { url: string }) => {
         fetchData();
     }, [url]);
 
+    useEffect(() => {
+        if (mobileData && desktopData) {
+            const mobileScore =
+                mobileData.lighthouseResult.categories.performance.score * 100;
+            const desktopScore =
+                desktopData.lighthouseResult.categories.performance.score * 100;
+            const seoScore =
+                mobileData.lighthouseResult.categories.seo.score * 100;
 
-
-    useEffect(() =>{
-      if(mobileData && desktopData) {
-        const mobileScore = mobileData.lighthouseResult.categories.performance.score * 100;
-        const desktopScore = desktopData.lighthouseResult.categories.performance.score * 100;
-        const seoScore = mobileData.lighthouseResult.categories.seo.score * 100;
-
-        // Calculate average score
-        const average = (mobileScore + desktopScore + seoScore) / 3;
-        setAvgScore(average);
-      }
+            // Calculate average score
+            const average = (mobileScore + desktopScore + seoScore) / 3;
+            setAvgScore(average);
+        }
     }, [mobileData, desktopData]);
 
-    useEffect(()=>{
+    useEffect(() => {
         const fetchLeadData = async () => {
             try {
                 setLeadLoading(true);
-                const response = await axios.post('http://localhost:3000/lead', { url });
-                if(response && response.data) {
+                const response = await axios.post(
+                    'http://localhost:3000/lead',
+                    { url }
+                );
+                if (response && response.data) {
                     // Handle lead data if needed
                     console.log('Lead Data:', response.data);
                     setLeadData(response.data.analytics);
                 }
             } catch (error) {
-                console.log(error)
-            }finally{
+                console.log(error);
+            } finally {
                 setLeadLoading(false);
             }
-            
-        }
-        fetchLeadData()
-    }, [url])
+        };
+        fetchLeadData();
+    }, [url]);
 
-
-      useEffect(()=>{
+    useEffect(() => {
         const fetchLeadData = async () => {
             try {
-                setTrafficLoading(true);
-                const response = await axios.post('http://localhost:3000/traffic', { url });
-                if(response && response.data.data.traffic !== 'NA') {
+                const response = await axios.post(
+                    'http://localhost:3000/traffic',
+                    { url }
+                );
+                if (response && response.data.data.traffic !== 'NA') {
                     // Handle lead data if needed
                     console.log('Lead Data:', response.data.data);
                     setTrafficData(response.data.data);
-                    setIsEliteClient(response.data.data.plan === 'Growth Elite');
+                    setIsEliteClient(
+                        response.data.data.plan === 'Growth Elite'
+                    );
                 }
             } catch (error) {
-                console.log(error)
-            }finally{
-                setTrafficLoading(false);
+                console.log(error);
             }
-            
-        }
-        fetchLeadData()
-    }, [url])
+        };
+        fetchLeadData();
+    }, [url]);
 
     const tabs = [
         { id: 'mobile', label: 'Mobile' },
@@ -131,67 +132,81 @@ const PageSpeedResults = ({ url }: { url: string }) => {
     return (
         <div className="">
             <div className="text-left mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Website Scorecard</h2>
-          </div>
-            <MainResult url={url} loading={mobileLoading || desktopLoading} averageScore={avgScore} />
+                <h2 className="text-2xl font-medium text-gray-900 mb-4">
+                    Website Scorecard
+                </h2>
+            </div>
+            <MainResult
+                url={url}
+                loading={mobileLoading || desktopLoading}
+                averageScore={avgScore}
+            />
 
             {/* Tab Navigation */}
-            <div className='px-10'>
-<div className="flex bg-gray-50 text-center">
-                {tabs.map(tab => (
-                    <button
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`
+            <div className="px-10">
+                <div className="flex bg-white text-center">
+                    {tabs.map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveTab(tab.id)}
+                            className={`
               flex flex-1 justify-center cursor-pointer items-center gap-2 px-6 py-4 text-sm transition-all duration-200
               ${
                   activeTab === tab.id
                       ? 'bg-white border-b-2 border-[#799F92]  font-semibold '
-                      : 'text-gray-600 border-b-2 border-gray-50 hover:text-gray-900 hover:bg-gray-100'
+                      : 'text-gray-600 border-b-2 border-gray-50 hover:text-gray-900 hover:border-[#799F92]'
               }
-              ${ tab.id === 'lead'  && !leadData ? 'hidden' : 'flex' }
-              ${ tab.id === 'traffic'  && !trafficData ? 'hidden' : 'flex' }
+              ${tab.id === 'lead' && !leadData ? 'hidden' : 'flex'}
+              ${tab.id === 'traffic' && !trafficData ? 'hidden' : 'flex'}
             `}
-                    >
-                        {tab.label}
-                    </button>
-                ))}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
+                </div>
             </div>
-            </div>
-            
 
             {/* Tab Content - All tabs are mounted but only active one is visible */}
             <div className="p-6 px-10">
                 <div
                     className={`${activeTab === 'mobile' ? 'block' : 'hidden'}`}
                 >
-                    <MobileTab data={mobileData} loading={mobileLoading} isEliteClient={isEliteClient} />
+                    <MobileTab
+                        data={mobileData}
+                        loading={mobileLoading}
+                        isEliteClient={isEliteClient}
+                    />
                 </div>
 
                 <div
                     className={`${activeTab === 'desktop' ? 'block' : 'hidden'}`}
                 >
-                    <DesktopTab data={desktopData} loading={desktopLoading} isEliteClient={isEliteClient} />
+                    <DesktopTab
+                        data={desktopData}
+                        loading={desktopLoading}
+                        isEliteClient={isEliteClient}
+                    />
                 </div>
 
                 <div className={`${activeTab === 'seo' ? 'block' : 'hidden'}`}>
                     <SEOTab data={desktopData} loading={mobileLoading} />
                     <BasicSEO url={url} />
                 </div>
-{
-    trafficData && <div
-                    className={`${activeTab === 'traffic' ? 'block' : 'hidden'}`}
-                >
-                    <TrafficTab trafficData={trafficData} />
-                </div>
-}
-                
-{
-    leadData &&  <div className={`${activeTab === 'lead' ? 'block' : 'hidden'}`}>
-                    <LeadTab leadData={leadData} loading={leadLoading}  />
-                </div>
-}
-               
+                {trafficData && (
+                    <div
+                        className={`${activeTab === 'traffic' ? 'block' : 'hidden'}`}
+                    >
+                        <TrafficTab trafficData={trafficData} />
+                    </div>
+                )}
+
+                {leadData && (
+                    <div
+                        className={`${activeTab === 'lead' ? 'block' : 'hidden'}`}
+                    >
+                        <LeadTab leadData={leadData} loading={leadLoading} />
+                    </div>
+                )}
 
                 <div
                     className={`${activeTab === 'security' ? 'block' : 'hidden'}`}

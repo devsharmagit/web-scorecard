@@ -1,8 +1,10 @@
 import { Loader2 } from "lucide-react";
-import { getGrade } from "../../constants/grading";
+import { getGrade, getScoreColor } from "../../constants/grading";
 import type { PageSpeedData } from '../../types/pagespeed';
 import { extractDesktopData } from "../../lib/helper";
 import ImproveWebsiteButton from "../ui/ImproveWebsiteButton";
+import { ScoreIcon } from "../ui/ScoreIcons";
+import RecommendationTable from "../ui/RecommendationTable";
 
 interface MobileTabProps {
   data: PageSpeedData | null;
@@ -57,12 +59,12 @@ const MobileTab = ({ data, loading, isEliteClient }: MobileTabProps) => {
       {/* Header with overall score */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex-1">
-          <div className="flex flex-col justify-center items-center gap-4">
-            <div className={`text-6xl font-semibold`}>
+          <div className="flex flex-col justify-center items-center gap-2">
+            <div className={`text-[52px] font-medium text-gray-900`}>
               {getPerformanceGrade(formatScore(performanceScore))}
             </div>
-              <h1 className="text-xl font-bold text-gray-900">Mobile Performance</h1>
-              <p className="text-gray-600 text-sm max-w-xl text-center" >
+              <h1 className="text-lg font-semibold text-gray-900">Mobile Performance</h1>
+              <p className="text-[#1F2F2F] text-sm max-w-xl text-center" >
                 Evaluates the speed and functionality of your website on mobile devices, directly influencing user experience and conversion rates.
               </p>
               {!isEliteClient && <ImproveWebsiteButton />}
@@ -77,9 +79,9 @@ const MobileTab = ({ data, loading, isEliteClient }: MobileTabProps) => {
             
             {/* Screenshot container */}
             <div className="absolute top-4 left-1 right-1 bottom-4 bg-white rounded-sm overflow-hidden">
-              {data?.lighthouseResult?.fullPageScreenshot?.screenshot?.data ? (
+              {data?.lighthouseResult?.audits['final-screenshot']['details']['data'] ? (
                 <img 
-                  src={data.lighthouseResult.fullPageScreenshot.screenshot.data}
+                  src={data?.lighthouseResult?.audits['final-screenshot']['details']['data']}
                   alt="Website screenshot"
                   className="w-full h-full object-cover object-top"
                 />
@@ -100,67 +102,60 @@ const MobileTab = ({ data, loading, isEliteClient }: MobileTabProps) => {
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="grid border border-gray-200 rounded p-2.5  grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         {/* Speed Index */}
         {speedIndex && (
-          <div className="border-gray-200 border  p-6 rounded-sm">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-semibold text-gray-900">Speed Index</h3>
+          <div className="">
+          <div className="flex gap-2">
+            <div className="pt-4">
+              <ScoreIcon score={speedIndex.score} />
             </div>
-            <div className="text-2xl font-bold text-[#799F92] mb-2">
-              {speedIndex.displayValue}
-            </div>
-            <p className="text-sm text-gray-600">
-              {speedIndex.description.split('[')[0].trim()}
-            </p>
+          <div>
+              <h3 className="text-base text-[#333]">Speed Index</h3>
+              <div className={`text-2xl   ${getScoreColor(speedIndex.score)}`}>
+                {speedIndex.displayValue}
+              </div>
           </div>
+        </div>
+      </div>
         )}
 
         {/* Total Blocking Time */}
-        {totalBlockingTime && (
-          <div className="bg-white border-gray-200 border p-6 rounded-sm">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-semibold text-gray-900">Total Blocking Time</h3>
-
+         {totalBlockingTime && (
+          <div className="">
+          <div className="flex gap-2">
+            <div className="pt-4">
+              <ScoreIcon score={totalBlockingTime.score} />
             </div>
-            <div className="text-2xl font-bold text-[#799F92] mb-2">
-              {totalBlockingTime.displayValue}
-            </div>
-            <p className="text-sm text-gray-600">
-              {totalBlockingTime.description.split('[')[0].trim()}
-            </p>
+          <div>
+              <h3 className="text-base text-[#333]">Total Blocking Time</h3>
+              <div className={`text-2xl   ${getScoreColor(totalBlockingTime.score)}`}>
+                {totalBlockingTime.displayValue}
+              </div>
           </div>
+        </div>
+      </div>
         )}
       </div>
 
-  
-  {/* Opportunities Section */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Opportunities</h2>
-       
+      <div className="space-y-4">       
        
     {/* Passed Diagnostics Section */}
       {passedDiagnostics.length > 0 && (
-        <div className="space-y-4 mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Passed Diagnostics</h2>
+        <div className="space-y-4 mb-8 border-[#799F92] border rounded-lg overflow-hidden ">
           {passedDiagnostics.map((diagnostic, index) => (
-            <div key={index} className="bg-white border border-[#799F92] rounded-sm p-4">
-              <div className="flex items-start justify-between mb-3">
+             <div key={index} className={"bg-white p-4 " + (index !== 0 && "border-gray-200 border-t")}>
+              <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="font-semibold text-xl text-gray-900">{diagnostic.title}</h3>
-                    <span className="px-2 py-1 rounded text-sm font-medium bg-[#799F92] text-white">
+                    <h3 className="font-semibold text-lg text-gray-900">{diagnostic.title}</h3>
+                    <span className="px-2 py-1 rounded-lg text-base bg-[#799F92] text-white">
                       Excellent
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 font-medium">
-                    {diagnostic.description.split('[')[0].trim()}
+                  <p className="text-sm text-[#1F2F2F] max-w-xl">
+                    {diagnostic.description}
                   </p>
-                  {diagnostic.displayValue && (
-                    <div className="text-xs text-gray-600 mt-2 font-medium">
-                      Value: {diagnostic.displayValue}
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
@@ -170,58 +165,24 @@ const MobileTab = ({ data, loading, isEliteClient }: MobileTabProps) => {
 
       {/* Failed Diagnostics Section */}
       {failedDiagnostics.length > 0 && (
-        <div className="space-y-4 mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Failed Diagnostics</h2>
+        <div className="space-y-4 mb-8 border-[#fa3] border rounded-lg overflow-hidden ">
           {failedDiagnostics.map((diagnostic, index) => (
-            <div key={index} className="bg-white border border-[#fa3] rounded-sm p-4">
-              <div className="flex items-start justify-between mb-3">
+            <div key={index} className={"bg-white p-4 " + (index !== 0 && "border-gray-200 border-t")}>
+              <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="font-semibold text-xl text-gray-900">{diagnostic.title}</h3>
-                    <span className="px-2 py-1 rounded text-sm font-medium bg-[#fa3] text-white">
+                    <h3 className="font-semibold text-lg text-gray-900">{diagnostic.title}</h3>
+                    <span className="px-2 py-1 rounded-lg text-base bg-[#fa3] text-white">
                       Needs Improvement
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 font-medium">
-                    {diagnostic.description.split('[')[0].trim()}
+                  <p className="text-sm text-[#1F2F2F] max-w-xl">
+                    {diagnostic.description}
                   </p>
-                  {diagnostic.displayValue && (
-                    <div className="text-xs text-gray-600 mt-2 font-medium">
-                      Impact: {diagnostic.displayValue}
-                    </div>
-                  )}
                   
                   {/* Table for failed diagnostics with details */}
                    {diagnostic.recommended_details && diagnostic.recommended_details.items && (
-                    <div className="mt-4">
-                      <div className="overflow-x-auto">
-                        <table className="min-w-full bg-gray-50 border border-gray-200 rounded">
-                          <thead className="bg-gray-100">
-                            <tr>
-                              {diagnostic.recommended_details.headings && diagnostic.recommended_details.headings.map((heading, headingIndex) => (heading.label &&
-                                <th key={headingIndex} className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider border-b">
-                                  {heading.label || heading.key || heading.valueType}
-                                </th>
-                              ))}
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-gray-200">
-                            {diagnostic.recommended_details.items.slice(0, 5).map((item, itemIndex) => (
-                              <tr key={itemIndex} className="hover:bg-gray-50">
-                                {diagnostic.recommended_details.headings && diagnostic.recommended_details.headings.map((heading, headingIndex) => (heading.label &&
-                                  <td key={headingIndex} className="px-4 py-2 text-sm text-gray-900 border-b">
-                                    {typeof item === 'object' && item !== null 
-                                      ? (item[heading.key] || item[heading.valueType] || '-')
-                                      : (Array.isArray(item) ? item[headingIndex] : item)
-                                    }
-                                  </td>
-                                ))}
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
+                    <RecommendationTable diagnostic={diagnostic} />
                   )}
                 </div>
               </div>

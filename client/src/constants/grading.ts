@@ -53,3 +53,19 @@ export  const getStatusColor = (status: string) => {
         return 'text-red-600';
     }
   };
+
+export function getScoreColor(score : number) {
+  let className = '';
+
+  if (score <= 0.49) {
+    className = 'text-[#f33]';
+  } else if (score >= 0.5 && score <= 0.89) {
+    className = 'text-[#fa3]';
+  } else if (score >= 0.9) {
+    className = 'text-[#00cc66]';
+  }
+
+  return className;
+}
+
+
