@@ -5,6 +5,7 @@ import { Tooltip } from './ui/Tooltop';
 import yesImageSrc from '../assets/yes.svg';
 import corssImageSrc from '../assets/cross.svg';
 import exclaimationImageSrc from '../assets/exclaimation.svg';
+import type { GenericSEOAnalysisResponse } from '../types/seo.type';
 
 const prettifyKey = (key: string): string => {
     const knownAbbreviations = ['SEO', 'URL', 'API']; // Add more as needed
@@ -21,12 +22,13 @@ const prettifyKey = (key: string): string => {
 };
 
 
-const renderValue = (value: any) => {
+
+const renderValue = ( value : any) => {
     if (Array.isArray(value)) {
         if (value.length === 0) return null;
         return (
             <div className="px-4 py-2 text-sm bg-black text-white overflow-x-auto max-w-full">
-                {value.map((v: any, i: number) => (
+                {value.map((v, i: number) => (
                     <div key={i} className="">{String(v)}</div>
                 ))}
             </div>
@@ -35,7 +37,7 @@ const renderValue = (value: any) => {
     if (typeof value === 'object' && value !== null) {
         return (
             <div className="flex flex-wrap gap-2 max-w-full">
-                {Object.entries(value).map(([k]: [string, any]) => (
+                {Object.entries(value).map(([k]) => (
                     <span key={k} className="bg-white px-2 py-1 rounded text-base text-gray-900 ">{k}</span>
                 ))}
             </div>
@@ -49,19 +51,17 @@ const renderValue = (value: any) => {
 
 const BasicSEO = ({url}: {url: string}) => {
     const [loading, setLoading] = useState<boolean>(true);
-    const [seoData, setSeoData] = useState<any>(null);
+    const [seoData, setSeoData] = useState<GenericSEOAnalysisResponse | null>(null);
 
     console.log(seoData)
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                console.log('Fetching SEO data for URL:', url);
                 setLoading(true);
                 const response = await axios.get('http://localhost:3000/getSEOData', {
                     params: { url }
                 });
-                console.log('SEO data response:', response)
                 if (response.status !== 200) {
                     throw new Error('Failed to fetch SEO data');
                 }
@@ -106,7 +106,7 @@ const BasicSEO = ({url}: {url: string}) => {
         <div className="space-y-6">
             <h2 className="text-xl font-semibold mb-2 text-center">Basic SEO</h2>
             <div className="bg-[#F0F4F8] rounded-lg border border-[#799F92] overflow-hidden">
-                {Object.entries(basicSEO).map(([key, { value, message, valid }]: any, idx) => (
+                {Object.entries(basicSEO).map(([key, { value, message, valid }], idx) => (
                     <div key={key} className={`px-4 py-5 ${idx !== 0 && "border-t border-[#D9E2EC]"}`}>
                         {/* Mobile: Column layout, MD+: Row layout */}
                         <div className="flex flex-col md:flex-row md:items-start gap-4">

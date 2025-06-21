@@ -35,7 +35,6 @@ const SEOTab = ({ data, loading }: SEOTabProps) => {
   const passedDiagnostics = filteredData?.seo?.diagnostics?.passed || [];
   const failedDiagnostics = filteredData?.seo?.diagnostics?.failed || [];
   failedDiagnostics.pop()
-  console.log(failedDiagnostics)
 
   return (
     <div className="mx-auto bg-white">

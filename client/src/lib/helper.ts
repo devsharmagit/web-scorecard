@@ -1,3 +1,5 @@
+import type { PageSpeedData } from "../types/pagespeed";
+
 // Types for analytics metrics
 export interface AnalyticsMetric {
   id: string;

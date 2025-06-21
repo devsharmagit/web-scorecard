@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Grade from '../ui/Grade';
+import type { SecurityCheck, SecurityDataType } from '../../types/security';
 
-const SecurityTab = ({url}: {url:string}) => {
+interface SecurityTabProps {
+  url: string;
+}
+
+const SecurityTab: React.FC<SecurityTabProps> = ({ url }) => {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<any | null>(null);
+  const [data, setData] = useState<SecurityDataType | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  console.log('SecurityTab rendered with URL:', data);
+  console.log("Security data is meri jan")
+  console.log({ data });
 
   useEffect(() => {
     const fetchSecurityData = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.post('http://localhost:3000/security', { url });
+        const response = await axios.post<SecurityDataType>('http://localhost:3000/security', { url });
         setData(response.data);
       } catch (err) {
         if (axios.isAxiosError(err)) {
@@ -36,8 +42,8 @@ const SecurityTab = ({url}: {url:string}) => {
   const failed = data?.data_desktop_security?.failed || [];
 
   // Group diagnostics by group property
-  const groupDiagnostics = (diagnostics: any[]) => {
-    return diagnostics.reduce((groups: any, diagnostic: any) => {
+  const groupDiagnostics = (diagnostics: SecurityCheck[]): Record<string, SecurityCheck[]> => {
+    return diagnostics.reduce((groups: Record<string, SecurityCheck[]>, diagnostic) => {
       const group = diagnostic.group || 'Other';
       if (!groups[group]) {
         groups[group] = [];
@@ -58,7 +64,7 @@ const SecurityTab = ({url}: {url:string}) => {
       </div>
     );
   }
- 
+
   if (error) {
     return (
       <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6">
@@ -67,7 +73,11 @@ const SecurityTab = ({url}: {url:string}) => {
     );
   }
 
-  const renderDiagnosticGroup = (groupName: string, diagnostics: any[], isPassed: boolean) => {
+  const renderDiagnosticGroup = (
+    groupName: string,
+    diagnostics: SecurityCheck[],
+    isPassed: boolean
+  ) => {
     return (
       <div key={groupName} className="mb-8">
         <h3 className="text-[20px] md:text-2xl font-bold text-gray-900 py-3 text-center">
@@ -88,7 +98,6 @@ const SecurityTab = ({url}: {url:string}) => {
                       {isPassed ? 'Excellent' : 'Needs Improvement'}
                     </span>
                   </div>
-                  {/* Only show description for passed diagnostics */}
                   {isPassed && (
                     <p className="text-sm text-[#1F2F2F]">
                       {diagnostic.description}
@@ -107,18 +116,18 @@ const SecurityTab = ({url}: {url:string}) => {
     <div className="bg-white">
       <div className="flex items-center justify-between mb-8 py-5 lg:py-10">
         <Grade 
-        description='Reviews the implementation of best practices to safeguard user data and ensure the website is protected against potential threats.' 
-        title='Security'
-        score={score}
-        isEliteClient={false} // Assuming this is not needed for Security tab
-        showButton={false}
+          description='Reviews the implementation of best practices to safeguard user data and ensure the website is protected against potential threats.' 
+          title='Security'
+          score={score}
+          isEliteClient={false}
+          showButton={false}
         />
       </div>
 
       {Object.keys(passedGroups).length > 0 && (
         <div className="mb-8">
           {Object.entries(passedGroups).map(([groupName, diagnostics]) =>
-            renderDiagnosticGroup(groupName, diagnostics as any[], true)
+            renderDiagnosticGroup(groupName, diagnostics, true)
           )}
         </div>
       )}
@@ -126,7 +135,7 @@ const SecurityTab = ({url}: {url:string}) => {
       {Object.keys(failedGroups).length > 0 && (
         <div className="mb-8">
           {Object.entries(failedGroups).map(([groupName, diagnostics]) =>
-            renderDiagnosticGroup(groupName, diagnostics as any[], false)
+            renderDiagnosticGroup(groupName, diagnostics, false)
           )}
         </div>
       )}

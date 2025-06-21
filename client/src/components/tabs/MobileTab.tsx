@@ -41,8 +41,6 @@ const MobileTab = ({ data, loading, isEliteClient }: MobileTabProps) => {
   const passedDiagnostics = filteredData?.performance?.diagnostics?.passed || [];
   const failedDiagnostics = filteredData?.performance?.diagnostics?.failed || [];
 
-  console.log("Filtered Mobile Data:", filteredData);
-
 
   return (
     <div className=" mx-auto bg-white">

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { HelpCircle } from 'lucide-react';
 
 interface TooltipProps {
-  tooltipKey: keyof typeof tooltipContent;
+  tooltipKey: string;
   className?: string;
 }
 
@@ -26,8 +26,6 @@ const tooltipContent = {
 
 export const Tooltip: React.FC<TooltipProps> = ({ tooltipKey, className = '' }) => {
   const [isVisible, setIsVisible] = useState(false);
-
-  console.log('Tooltip rendered for:', tooltipKey);
 
   return (
     <div 
@@ -64,7 +62,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ tooltipKey, className = '' }) 
           background: '#555d66',
         }}
       >
-        {tooltipContent[tooltipKey]}
+        {tooltipContent[tooltipKey] && tooltipContent[tooltipKey]}
         
         {/* Triangle pointer */}
         <div

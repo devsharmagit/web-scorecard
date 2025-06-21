@@ -37,7 +37,7 @@ const PageSpeedScores: React.FC = () => {
 
       return { strategy, performance, seo };
     } catch (error) {
-      console.log(error)
+      
       return null;
     }
   };

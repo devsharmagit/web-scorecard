@@ -33,14 +33,14 @@ const DesktopTab = ({ data, loading, isEliteClient }: DesktopTabProps) => {
     );
   }
   const performanceScore = data.lighthouseResult.categories?.performance?.score || 0;
-  
+
   const filteredData = extractDesktopData(data);
   const speedIndex = filteredData?.performance?.analytics["speed-index"];
   const totalBlockingTime = filteredData?.performance?.analytics["total-blocking-time"];
   const passedDiagnostics = filteredData?.performance?.diagnostics?.passed || [];
   const failedDiagnostics = filteredData?.performance?.diagnostics?.failed || [];
   
-  console.log("Filtered Desktop Data:", filteredData);
+  
 
   return (
     <div className="mx-auto bg-white">
