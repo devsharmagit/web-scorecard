@@ -10,6 +10,7 @@ import { getMobileScore, getDesktopScore } from '../services/api/api-functions';
 import type { PageSpeedData } from '../types/pagespeed';
 import BasicSEO from './BasicSEO';
 import axios from 'axios';
+import { ArrowDownToLine } from 'lucide-react';
 
 const PageSpeedResults = ({ url }: { url: string }) => {
     const [activeTab, setActiveTab] = useState<
@@ -125,16 +126,19 @@ const PageSpeedResults = ({ url }: { url: string }) => {
         { id: 'desktop', label: 'Desktop' },
         { id: 'seo', label: 'SEO' },
         { id: 'traffic', label: 'Traffic' },
-        { id: 'lead', label: 'Lead Gen' },
+        { id: 'lead', label: 'Leads' },
         { id: 'security', label: 'Security' },
     ] as const;
 
     return (
         <div className="">
-            <div className="text-left mb-8">
+            <div className="text-left mb-0 lg:mb-8 flex flex-col items-center lg:flex-row justify-between">
                 <h2 className="text-2xl font-medium text-gray-900 mb-4">
                     Website Scorecard
                 </h2>
+                <button className='flex gap-2 items-center bg-[#1F2F2F] hover:bg-[#799f92] shadow-none hover:shadow-2xl text-white font-semibold py-2 px-6 rounded-full transition-all duration-200  text-xs hover:cursor-pointer '>
+                    <ArrowDownToLine height={20} width={20} /> DOWNLOAD PDF
+                </button>
             </div>
             <MainResult
                 url={url}
@@ -143,8 +147,8 @@ const PageSpeedResults = ({ url }: { url: string }) => {
             />
 
             {/* Tab Navigation */}
-            <div className="px-10">
-                <div className="flex bg-white text-center">
+            <div className="px-0 lg:px-10">
+                <div className="flex bg-white text-center sm:overflow-hidden overflow-x-scroll w-full">
                     {tabs.map(tab => (
                         <button
                             key={tab.id}
@@ -167,7 +171,7 @@ const PageSpeedResults = ({ url }: { url: string }) => {
             </div>
 
             {/* Tab Content - All tabs are mounted but only active one is visible */}
-            <div className="p-6 px-10">
+            <div className="p-0 py-6 lg:px-10 ">
                 <div
                     className={`${activeTab === 'mobile' ? 'block' : 'hidden'}`}
                 >

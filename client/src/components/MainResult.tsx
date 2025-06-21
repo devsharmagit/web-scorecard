@@ -27,12 +27,12 @@ const MainResult = ({
     return (
         <div className="px-10">
             {/* Header with URL and Grade */}
-            <div className="flex items-center gap-10 mb-4">
+            <div className="flex flex-col lg:flex-row text-center lg:text-left items-center gap-2 lg:gap-10 mb-4">
                 
-                    <div className={`text-[52px] font-medium text-black w-[240px] h-[120px] flex justify-center items-center` }>
+                    <div className={` text-4xl lg:text-[52px] font-medium text-black w-[240px] h-[70px] lg:h-[120px] flex justify-center items-center` }>
                         {grade}
                     </div>
-                    <div className="flex flex-col gap-2 text-left">
+                    <div className="flex flex-col gap-2 text-center lg:text-left">
                         <div className="text-base font-semibold text-gray-900">{url}</div>
 
                         <div className="text-2xl font-medium ">

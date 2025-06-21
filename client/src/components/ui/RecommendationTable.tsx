@@ -17,33 +17,43 @@ const RecommendationTable = ({ diagnostic }:{diagnostic : DiagnosticEntry}) => {
   };
 
   // Helper function to render cell content
-  const renderCellContent = (item : DiagnosticItem, heading : DiagnosticHeading) => {
-    let value;
-    
-    if (typeof item === 'object' && item !== null) {
-      value = item[heading.key] || item[heading.valueType] || '-';
-    } else if (Array.isArray(item)) {
-      value = item[heading.key] || '-';
-    } else {
-      value = item;
-    }
+const renderCellContent = (item: DiagnosticItem, heading: DiagnosticHeading) => {
+  const value = item[heading.key] ?? item[heading.valueType] ?? '-';
 
-    // If the value is a valid URL, render as a link
-    if (isValidUrl(value)) {
-      return (
-        <a 
-          href={value} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="text-blue-600 hover:text-blue-800 underline"
-        >
-          {value}
-        </a>
-      );
-    }
+  // If it's a valid URL
+  if (typeof value === 'string' && isValidUrl(value)) {
+    return (
+      <a 
+        href={value} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-800 underline"
+      >
+        {value}
+      </a>
+    );
+  }
 
+  // If it's a string or number, render as is
+  if (typeof value === 'string' || typeof value === 'number') {
     return value;
-  };
+  }
+
+  // If it's an object (like the "node"), try rendering a meaningful part of it
+  if (typeof value === 'object' && value !== null) {
+    // Prefer `snippet`, fallback to `nodeLabel`, else JSON string
+    if (value.snippet) {
+      return <code className="text-xs">{value.snippet}</code>;
+    } else if (value.nodeLabel) {
+      return <span className="text-xs">{value.nodeLabel}</span>;
+    } else {
+      return <pre className="text-xs whitespace-pre-wrap break-all">{JSON.stringify(value, null, 2)}</pre>;
+    }
+  }
+
+  return '-';
+};
+
 
   // Don't render if no data
   if (!diagnostic?.recommended_details?.items || !diagnostic?.recommended_details?.headings) {
@@ -51,7 +61,7 @@ const RecommendationTable = ({ diagnostic }:{diagnostic : DiagnosticEntry}) => {
   }
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 w-full">
       {/* Toggle Button */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
@@ -63,8 +73,8 @@ const RecommendationTable = ({ diagnostic }:{diagnostic : DiagnosticEntry}) => {
 
       {/* Collapsible Table */}
       {isExpanded && (
-        <div className="mt-4">
-          <div className="overflow-x-auto">
+        <div className="mt-4 w-full overflow-x-scroll">
+          
             <table className="w-full bg-gray-50 border border-gray-200 rounded">
               <thead className="bg-gray-100">
                 <tr>
@@ -95,7 +105,7 @@ const RecommendationTable = ({ diagnostic }:{diagnostic : DiagnosticEntry}) => {
                 ))}
               </tbody>
             </table>
-          </div>
+          
         </div>
       )}
     </div>

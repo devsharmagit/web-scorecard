@@ -1,4 +1,5 @@
-import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
+import TrendBadge from '../ui/TrendBadge';
+
 
 function TrafficTab({ trafficData }: { trafficData: any | null }) {
   if (!trafficData) {
@@ -65,54 +66,36 @@ function TrafficTab({ trafficData }: { trafficData: any | null }) {
     comparison: generateComparisonDates()
   };
 
-  // Determine badge color and icon based on trend
-  let badgeColor = '';
-  let Icon = Minus;
-  if (leadItem.trend > 0) {
-    badgeColor = 'text-[#799F92] bg-green-50';
-    Icon = ArrowUpRight;
-  } else if (leadItem.trend < 0) {
-    badgeColor = 'bg-red-100 text-red-700';
-    Icon = ArrowDownRight;
-  } else {
-    badgeColor = 'bg-orange-100 text-orange-700';
-    Icon = Minus;
-  }
+
 
   return (
     <div className="bg-white mx-auto ">
-      <div className="flex items-center justify-between mb-8 py-10">
+      <div className="flex items-center justify-between mb-8 py-5 lg:py-10">
         <div className="flex-1">
           <div className="flex flex-col justify-center items-center gap-2">
-            <h1 className="text-xl font-bold text-gray-900">Traffic Information</h1>
-            <p className="text-gray-600 text-sm max-w-xl text-center">
+            <h1 className="text-lg font-semibold text-gray-900">Traffic</h1>
+            <p className="text-[#1F2F2F] text-sm max-w-xl text-center">
               Reflects the volume of visitors to your website, providing insight into its online reach and audience engagement.
             </p>
           </div>
         </div>
       </div>
-      
+      <h1 className="text-xl font-semibold text-gray-900 text-center mb-3">
+        Traffic Information
+        </h1>
       <div className="flex items-center max-w-[350px] mx-auto justify-between h-full p-4 border border-[#799F92] rounded-lg">
         {/* Value and Label */}
         <div className="flex flex-col items-start gap-1">
-          <h3 className="font-semibold text-4xl text-gray-800 leading-none">
+          <h3 className="font-medium text-2xl text-gray-800 leading-none">
             {trafficData.traffic.toLocaleString()}
           </h3>
-          <p className="font-semibold text-sm text-gray-900">
+          <p className="text-base text-gray-900">
             Total traffic
           </p>
         </div>
         
         {/* Trend Badge */}
-        <div className="flex flex-col items-end gap-1 ml-4">
-          <span className={`flex items-center gap-1 px-2 py-1 rounded ${badgeColor} font-semibold text-sm`}>
-            {leadItem.trend !== 0 && <Icon className="w-4 h-4" />}
-            {Math.abs(leadItem.trend).toFixed(1)}%
-          </span>
-          <span className="text-xs text-gray-500 font-semibold text-right max-w-[110px] leading-tight">
-            {leadItem.comparison}
-          </span>
-        </div>
+        <TrendBadge comparison={leadItem.comparison} trend={leadItem.trend} />
       </div>
     </div>
   );

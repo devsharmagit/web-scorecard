@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getGrade } from '../../constants/grading';
+import Grade from '../ui/Grade';
 
 const SecurityTab = ({url}: {url:string}) => {
   const [loading, setLoading] = useState(false);
@@ -70,29 +70,30 @@ const SecurityTab = ({url}: {url:string}) => {
   const renderDiagnosticGroup = (groupName: string, diagnostics: any[], isPassed: boolean) => {
     return (
       <div key={groupName} className="mb-8">
-        <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center pb-2">
+        <h3 className="text-[20px] md:text-2xl font-bold text-gray-900 py-3 text-center">
           {groupName}
         </h3>
-        <div className="space-y-4">
+        <div className={`border rounded-lg overflow-hidden ${isPassed ? 'border-[#799F92]' : 'border-[#fa3]'}`}>
           {diagnostics.map((diagnostic, index) => (
-            <div key={index} className={`bg-white border ${isPassed ? 'border-[#799F92]' : 'border-[#fa3]'} rounded-sm p-4`}>
-              <div className="flex items-start justify-between mb-3">
+            <div key={index} className={`bg-white p-4 ${index !== 0 ? 'border-gray-200 border-t' : ''}`}>
+              <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h4 className="font-semibold text-xl text-gray-900">{diagnostic.title}</h4>
-                    <span className={`px-2 py-1 rounded text-sm font-medium ${
+                  <div className="flex justify-between md:justify-start items-center gap-3 mb-2.5">
+                    <h4 className="font-semibold text-[15px] md:text-lg text-gray-900">{diagnostic.title}</h4>
+                    <span className={`px-2 py-1 rounded md:rounded-lg text-xs md:text-base  text-white ${
                       isPassed 
-                        ? 'bg-[#799F92] text-white' 
-                        : diagnostic.status === 'Needs Attention' 
-                          ? 'bg-[#fa3] text-white'
-                          : 'bg-red-500 text-white'
+                        ? 'bg-[#799F92]' 
+                        : 'bg-[#fa3]'
                     }`}>
-                      {diagnostic.status}
+                      {isPassed ? 'Excellent' : 'Needs Improvement'}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 font-medium">
-                    {diagnostic.description}
-                  </p>
+                  {/* Only show description for passed diagnostics */}
+                  {isPassed && (
+                    <p className="text-sm text-[#1F2F2F]">
+                      {diagnostic.description}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -104,20 +105,14 @@ const SecurityTab = ({url}: {url:string}) => {
 
   return (
     <div className="bg-white">
-      <div className="flex items-center justify-between mb-8 py-10">
-        <div className="flex-1">
-          <div className="flex flex-col justify-center items-center gap-2">
-            <div className={`text-6xl font-semibold text-gray-900`}>
-              {getGrade(Math.round(score))}
-            </div>
-            <h1 className="text-xl font-bold text-gray-900">
-              Security
-            </h1>
-            <p className="text-gray-600 text-sm max-w-xl text-center">
-              Reviews the implementation of best practices to safeguard user data and ensure the website is protected against potential threats.
-            </p>
-          </div>
-        </div>
+      <div className="flex items-center justify-between mb-8 py-5 lg:py-10">
+        <Grade 
+        description='Reviews the implementation of best practices to safeguard user data and ensure the website is protected against potential threats.' 
+        title='Security'
+        score={score}
+        isEliteClient={false} // Assuming this is not needed for Security tab
+        showButton={false}
+        />
       </div>
 
       {Object.keys(passedGroups).length > 0 && (
