@@ -302,18 +302,18 @@ export async function getSeoData(url: string) {
     status: "success",
     advance_seo: {
       basic_seo: {
-        keyword_contents: {
+        common_keywords: {
           value: keywords,
           message: "Here are the most common keywords we found on your page:",
           valid: "undecisive"
         },
-        seo_description: checkMetaDescription(s_description),
-        h1_contents: checkH1Tags(h1),
-        h2_contents: checkH2Tags(h2),
-        alt_contents: checkAltTags(alt),
-        match_keyword_to_meta: checkKeywordMatch(keywords, s_title, s_description),
-        link_contents: checkLinks(links),
-        seo_title: checkTitle(s_title)
+        SEO_description: checkMetaDescription(s_description),
+        H1_contents: checkH1Tags(h1),
+        H2_contents: checkH2Tags(h2),
+        Image_ALT_Attributes: checkAltTags(alt),
+        Keywords_in_Title_and_Description: checkKeywordMatch(keywords, s_title, s_description),
+        Links_Ratio: checkLinks(links),
+        SEO_Title: checkTitle(s_title)
       },
       advance_seo: {
         search_preview: {
