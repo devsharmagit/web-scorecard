@@ -1,7 +1,23 @@
+import type { TrafficDataType } from '../../types/traffic.type';
 import TrendBadge from '../ui/TrendBadge';
 
 
-function TrafficTab({ trafficData }: { trafficData: any | null }) {
+interface TrafficTabProps {
+  trafficData: TrafficDataType ,
+  loading: boolean,
+  isError: boolean
+}
+
+function TrafficTab({ trafficData, loading, isError }: TrafficTabProps) {
+  
+  if(isError){
+    return (
+      <div className="text-center text-red-500 py-8">
+        Error fetching Mobile data.
+      </div>
+    );
+  }
+  
   if (!trafficData) {
     return <div className="mx-auto bg-white">No Traffic Data Available...</div>;
   }
@@ -10,10 +26,10 @@ function TrafficTab({ trafficData }: { trafficData: any | null }) {
   
   // Calculate trend percentage
   const calculateTrend = () => {
-    if (!previousMonthTraffic || previousMonthTraffic === 0) {
+    if (!Number(previousMonthTraffic) || Number(previousMonthTraffic) === 0) {
       return 0;
     }
-    return ((traffic - previousMonthTraffic) / previousMonthTraffic) * 100;
+    return ((Number(traffic) - Number( previousMonthTraffic)) / Number(previousMonthTraffic)) * 100;
   };
 
   // Generate dynamic comparison date range

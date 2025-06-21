@@ -8,15 +8,24 @@ import Grade from '../ui/Grade';
 interface SEOTabProps {
   data: PageSpeedData | null; // Allow data to be null initially
   loading?: boolean;
+  isError: boolean
 }
 
-const SEOTab = ({ data, loading }: SEOTabProps) => {
+const SEOTab = ({ data, loading, isError }: SEOTabProps) => {
 
    if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
         <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
         <span className="ml-2 text-gray-600">Analyzing SEO metrics...</span>
+      </div>
+    );
+  }
+
+   if(isError){
+    return (
+      <div className="text-center text-red-500 py-8">
+        Error fetching Mobile data.
       </div>
     );
   }

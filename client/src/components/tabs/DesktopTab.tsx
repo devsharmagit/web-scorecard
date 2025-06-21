@@ -11,9 +11,10 @@ interface DesktopTabProps {
   data: PageSpeedData | null; // Allow data to be null initially
   loading?: boolean;
   isEliteClient: boolean; 
+  isError: boolean
 }
 
-const DesktopTab = ({ data, loading, isEliteClient }: DesktopTabProps) => {
+const DesktopTab = ({ data, loading, isEliteClient, isError }: DesktopTabProps) => {
 
 
   if (loading) {
@@ -21,6 +22,14 @@ const DesktopTab = ({ data, loading, isEliteClient }: DesktopTabProps) => {
       <div className="flex items-center justify-center py-12">
         <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
         <span className="ml-2 text-gray-600">Analyzing desktop performance...</span>
+      </div>
+    );
+  }
+
+   if(isError){
+    return (
+      <div className="text-center text-red-500 py-8">
+        Error fetching Mobile data.
       </div>
     );
   }

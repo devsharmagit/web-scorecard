@@ -11,15 +11,23 @@ interface MobileTabProps {
   data: PageSpeedData | null;
   loading?: boolean;
   isEliteClient: boolean;
+  isError: boolean
 }
 
-const MobileTab = ({ data, loading, isEliteClient }: MobileTabProps) => {
+const MobileTab = ({ data, loading, isEliteClient, isError }: MobileTabProps) => {
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
         <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
         <span className="ml-2 text-gray-600">Analyzing mobile performance...</span>
+      </div>
+    );
+  }
+  if(isError){
+    return (
+      <div className="text-center text-red-500 py-8">
+        Error fetching Mobile data.
       </div>
     );
   }

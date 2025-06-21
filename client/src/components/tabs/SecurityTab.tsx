@@ -1,41 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
 import Grade from '../ui/Grade';
 import type { SecurityCheck, SecurityDataType } from '../../types/security';
 
 interface SecurityTabProps {
-  url: string;
+  data: SecurityDataType | null
+  error: boolean,
+  loading: boolean
 }
 
-const SecurityTab: React.FC<SecurityTabProps> = ({ url }) => {
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<SecurityDataType | null>(null);
-  const [error, setError] = useState<string | null>(null);
+const SecurityTab: React.FC<SecurityTabProps> = ({ data, error, loading } : SecurityTabProps) => {
 
-  console.log("Security data is meri jan")
-  console.log({ data });
-
-  useEffect(() => {
-    const fetchSecurityData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await axios.post<SecurityDataType>('http://localhost:3000/security', { url });
-        setData(response.data);
-      } catch (err) {
-        if (axios.isAxiosError(err)) {
-          setError(err.response?.data?.error || 'An error occurred while fetching security data.');
-        } else {
-          setError('An unexpected error occurred.');
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (url) {
-      fetchSecurityData();
-    }
-  }, [url]);
+  console.log({data, error, loading})
 
   const score = data?.data_desktop_security?.score || 0;
   const passed = data?.data_desktop_security?.passed || [];
@@ -65,10 +40,10 @@ const SecurityTab: React.FC<SecurityTabProps> = ({ url }) => {
     );
   }
 
-  if (error) {
+  if(error){
     return (
-      <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6">
-        <p>{error}</p>
+      <div className="text-center text-red-500 py-8">
+        Error fetching Mobile data.
       </div>
     );
   }

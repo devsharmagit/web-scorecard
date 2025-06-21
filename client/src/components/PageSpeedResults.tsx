@@ -6,7 +6,7 @@ import TrafficTab from './tabs/TrafficTab';
 import LeadTab from './tabs/LeadTab';
 import SecurityTab from './tabs/SecurityTab';
 import MainResult from './MainResult';
-import { usePageSpeedData, useLeadData, useTrafficData, useAverageScore } from '../hooks/usePageSpeedHooks';
+import { useAverageScore, useWebsiteData } from '../hooks/usePageSpeedHooks';
 import BasicSEO from './BasicSEO';
 import { ArrowDownToLine } from 'lucide-react';
 import { getTabButtonClasses, TABS, type TabId } from '../constants/tab';
@@ -25,13 +25,19 @@ const PageSpeedResults: React.FC<PageSpeedResultsProps> = ({ url }) => {
     const [activeTab, setActiveTab] = useState<TabId>('mobile');
 
     // Custom hooks for data fetching
-    const { mobileData, mobileLoading, desktopData, desktopLoading } = usePageSpeedData(url);
-    const { leadData, leadLoading } = useLeadData(url);
-    const { trafficData, isEliteClient } = useTrafficData(url);
-    const avgScore = useAverageScore(mobileData, desktopData);
+    
+    const {mobileData, mobileLoading, mobileError, 
+        desktopData, desktopLoading, desktopError,
+        leadData, leadLoading,
+        securityData, securityLoading, securityError,
+        seoData, seoLoading, seoError,
+        trafficData, trafficLoading, trafficError,
+        isEliteClient
+    } = useWebsiteData(url)
+    console.log("security dtata")
+    console.log(securityData)
 
-    // Debug logging
-    console.log({ trafficData });
+    const avgScore = useAverageScore(mobileData, desktopData);
 
     const isMainResultLoading = mobileLoading || desktopLoading;
 
@@ -78,6 +84,7 @@ const PageSpeedResults: React.FC<PageSpeedResultsProps> = ({ url }) => {
                         data={mobileData}
                         loading={mobileLoading}
                         isEliteClient={isEliteClient}
+                        isError={mobileError}
                     />
                 </div>
 
@@ -87,19 +94,20 @@ const PageSpeedResults: React.FC<PageSpeedResultsProps> = ({ url }) => {
                         data={desktopData}
                         loading={desktopLoading}
                         isEliteClient={isEliteClient}
+                        isError={desktopError}
                     />
                 </div>
 
                 {/* SEO Tab */}
                 <div className={activeTab === 'seo' ? 'block' : 'hidden'}>
-                    <SEOTab data={desktopData} loading={mobileLoading} />
-                    <BasicSEO url={url} />
+                    <SEOTab data={desktopData} loading={desktopLoading} isError={desktopError} />
+                    <BasicSEO data={seoData} isError={seoError} loading={seoLoading} />
                 </div>
 
                 {/* Traffic Tab - Conditionally rendered */}
                 {trafficData && (
                     <div className={activeTab === 'traffic' ? 'block' : 'hidden'}>
-                        <TrafficTab trafficData={trafficData} />
+                        <TrafficTab trafficData={trafficData} loading={trafficLoading} isError={trafficError} />
                     </div>
                 )}
 
@@ -112,7 +120,7 @@ const PageSpeedResults: React.FC<PageSpeedResultsProps> = ({ url }) => {
 
                 {/* Security Tab */}
                 <div className={activeTab === 'security' ? 'block' : 'hidden'}>
-                    <SecurityTab url={url} />
+                    <SecurityTab data={securityData} loading={securityLoading} error={securityError} />
                 </div>
             </div>
         </div>

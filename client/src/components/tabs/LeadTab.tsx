@@ -1,7 +1,8 @@
 import React from 'react'
 import TrendBadge from '../ui/TrendBadge';
+import type { LeadDataType } from '../../types/lead.type';
 
-const LeadTab = ({leadData} : {loading : boolean, leadData : null | any}) => {
+const LeadTab = ({leadData} : {loading : boolean, leadData : LeadDataType[]}) => {
   return (
     <div className='mx-auto bg-white'>
       <div className="flex items-center justify-between mb-8 py-5 lg:py-10">

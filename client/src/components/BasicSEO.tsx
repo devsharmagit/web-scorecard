@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react'
 import { Loader2} from 'lucide-react';
-import axios from 'axios';
 import { Tooltip } from './ui/Tooltop';
 import yesImageSrc from '../assets/yes.svg';
 import corssImageSrc from '../assets/cross.svg';
@@ -49,33 +47,13 @@ const renderValue = ( value : any) => {
     return null;
 };
 
-const BasicSEO = ({url}: {url: string}) => {
-    const [loading, setLoading] = useState<boolean>(true);
-    const [seoData, setSeoData] = useState<GenericSEOAnalysisResponse | null>(null);
+interface BaiscSEOProps{
+    data: GenericSEOAnalysisResponse | null,
+    loading: boolean,
+    isError: boolean
+}
 
-    console.log(seoData)
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                const response = await axios.get('http://localhost:3000/getSEOData', {
-                    params: { url }
-                });
-                if (response.status !== 200) {
-                    throw new Error('Failed to fetch SEO data');
-                }
-                setSeoData(response.data.data);
-            } catch (error) {
-                console.error('Error fetching SEO data:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        if(url){
-            fetchData();
-        }
-    }, [url]);
+const BasicSEO = ({data:seoData, loading, isError}: BaiscSEOProps) => {
 
     if (loading) {
         return (
@@ -85,7 +63,13 @@ const BasicSEO = ({url}: {url: string}) => {
             </div>
         );
     }
-
+    if(isError){
+        return (
+          <div className="text-center text-red-500 py-8">
+            Error fetching Mobile data.
+          </div>
+        );
+      }
     if (!seoData) {
         return (
             <div className="text-center text-gray-500 py-8">
