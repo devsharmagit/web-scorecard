@@ -142,8 +142,7 @@ const BasicSEO = ({data:seoData, loading, isError}: BaiscSEOProps) => {
                                 <div className="flex-1 min-w-0 flex flex-col gap-1">
                                     <div className="text-[#333] text-sm ">{search_preview.message}</div>
                                     <div className="min-w-0 overflow-hidden">
-                                        {/* @ts-expect-error this works fine */}
-                                        <div dangerouslySetInnerHTML={{ __html: search_preview.value }} />  
+                                        <div dangerouslySetInnerHTML={{ __html: search_preview.value[0] }} />  
                                     </div>
                                 </div>
                             </div>
@@ -168,8 +167,7 @@ const BasicSEO = ({data:seoData, loading, isError}: BaiscSEOProps) => {
                                 <div className="flex-1 min-w-0 flex flex-col gap-1">
                                     <div className="text-[#333] text-sm ">{search_preview.message}</div>
                                     <div className="min-w-0 overflow-hidden">
-                                        {/* @ts-expect-error this works fine */}
-                                        <div dangerouslySetInnerHTML={{ __html: search_preview.value }} />  
+                                        <div dangerouslySetInnerHTML={{ __html: search_preview.value[0] }} />  
                                     </div>
                                 </div>
                             </div>
