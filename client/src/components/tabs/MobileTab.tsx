@@ -1,4 +1,3 @@
-import { Loader2 } from "lucide-react";
 import type { PageSpeedData } from '../../types/pagespeed';
 import { extractDesktopData } from "../../lib/helper";
 import PassedDiagnostics from "../ui/PassedDiagnostics";
@@ -6,6 +5,7 @@ import FailedDiagnostics from "../ui/FailedDiagnostics";
 import KeyMatrics from "../ui/KeyMatrics";
 import mobileLayoutImage from '../../assets/mobile-layout.png';
 import Grade from "../ui/Grade";
+import Loader from "../ui/Loader";
 
 interface MobileTabProps {
   data: PageSpeedData | null;
@@ -18,10 +18,7 @@ const MobileTab = ({ data, loading, isEliteClient, isError }: MobileTabProps) =>
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
-        <span className="ml-2 text-gray-600">Analyzing mobile performance...</span>
-      </div>
+      <Loader text="Loading Mobile Data..." />
     );
   }
   if(isError){

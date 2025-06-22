@@ -12,18 +12,22 @@ import { ArrowDownToLine } from 'lucide-react';
 import { getTabButtonClasses, TABS, type TabId } from '../constants/tab';
 
 
-
-
-
 interface PageSpeedResultsProps {
     url: string;
 }
 
+function formatDate(timestamp: number): string {
+  const date = new Date(timestamp);
+  const month = date.getMonth() + 1; // getMonth() returns 0-11
+  const day = date.getDate();
+  const year = date.getFullYear();
 
+  return `${month}/${day}/${year}`;
+}
 
 const PageSpeedResults: React.FC<PageSpeedResultsProps> = ({ url }) => {
     const [activeTab, setActiveTab] = useState<TabId>('mobile');
-
+    
     // Custom hooks for data fetching
     
     const {mobileData, mobileLoading, mobileError, 
@@ -32,10 +36,8 @@ const PageSpeedResults: React.FC<PageSpeedResultsProps> = ({ url }) => {
         securityData, securityLoading, securityError,
         seoData, seoLoading, seoError,
         trafficData, trafficLoading, trafficError,
-        isEliteClient
+        isEliteClient, timeStamp, refetchData
     } = useWebsiteData(url)
-    console.log("security dtata")
-    console.log(securityData)
 
     const avgScore = useAverageScore(mobileData, desktopData);
 
@@ -45,10 +47,16 @@ const PageSpeedResults: React.FC<PageSpeedResultsProps> = ({ url }) => {
         <div className="">
             {/* Header Section */}
             <div className="text-left mb-0 lg:mb-8 flex flex-col items-center lg:flex-row justify-between">
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">
+                <div className='flex flex-col mb-4 gap-2 text-center lg:text-left'>
+                <h2 className="text-2xl font-medium text-gray-900">
                     Website Scorecard
                 </h2>
-                <button className="flex gap-2 items-center bg-[#1F2F2F] hover:bg-[#799f92] shadow-none hover:shadow-2xl text-white font-semibold py-2 px-6 rounded-full transition-all duration-200 text-xs hover:cursor-pointer">
+                {timeStamp && <p className='text-sm text-gray-900'> Laste Update at : {formatDate(timeStamp)}  <span onClick={refetchData} className='text-blue-500 underline hover:cursor-pointer'> (Refresh Data)  </span> </p>}
+                </div>
+                <button 
+                onClick={()=>console.log("clicked")}
+                disabled={mobileLoading || desktopLoading || seoLoading || securityLoading || trafficLoading || leadLoading }
+                className="disabled:bg-[#1F2F2F]/20 flex gap-2 items-center bg-[#1F2F2F] hover:bg-[#799f92] shadow-none hover:shadow-2xl text-white font-semibold py-3 px-6 rounded-full transition-all duration-200 text-xs hover:cursor-pointer">
                     <ArrowDownToLine height={20} width={20} /> 
                     DOWNLOAD PDF
                 </button>

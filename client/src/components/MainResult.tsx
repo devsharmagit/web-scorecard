@@ -2,7 +2,7 @@ import {
     getGrade,
     getRatingStatus,
 } from '../constants/grading';
-import { Loader2 } from 'lucide-react';
+import Loader from './ui/Loader';
 
 const MainResult = ({
     loading,
@@ -15,9 +15,7 @@ const MainResult = ({
 }) => {
     if (loading) {
         return (
-            <div className="flex items-center justify-center p-8">
-                <Loader2 className="animate-spin" /> Loading...
-            </div>
+            <Loader />
         );
     }
 

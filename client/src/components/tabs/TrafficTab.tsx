@@ -8,12 +8,12 @@ interface TrafficTabProps {
   isError: boolean
 }
 
-function TrafficTab({ trafficData, loading, isError }: TrafficTabProps) {
+function TrafficTab({ trafficData, isError }: TrafficTabProps) {
   
   if(isError){
     return (
       <div className="text-center text-red-500 py-8">
-        Error fetching Mobile data.
+        Error fetching Traffic data.
       </div>
     );
   }

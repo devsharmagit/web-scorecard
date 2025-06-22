@@ -1,6 +1,6 @@
 export interface LeadDataType {
     value: number,
-    lable: string,
+    label: string,
     trend: number,
     comparison: string
 }

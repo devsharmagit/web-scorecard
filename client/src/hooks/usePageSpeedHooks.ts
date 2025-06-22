@@ -10,7 +10,7 @@ import type { GenericSEOAnalysisResponse } from '../types/seo.type';
 // Constants
 const API_BASE_URL = 'http://localhost:3000';
 const ELITE_PLAN_NAME = 'Growth Elite';
-const CACHE_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
+const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 // Types for cached data
 interface CachedData<T> {
@@ -35,14 +35,14 @@ const isCacheValid = (timestamp: number): boolean => {
     return Date.now() - timestamp < CACHE_DURATION;
 };
 
-const getCachedData = <T>(key: string): T | null => {
+const getCachedData = <T>(key: string): {data :T, timestamp: number} | null => {
     try {
         const cached = localStorage.getItem(key);
         if (!cached) return null;
         
         const parsedData: CachedData<T> = JSON.parse(cached);
         if (isCacheValid(parsedData.timestamp)) {
-            return parsedData.data;
+            return {data : parsedData.data, timestamp: parsedData.timestamp};
         } else {
             localStorage.removeItem(key);
             return null;
@@ -70,22 +70,25 @@ export const useWebsiteData = (url: string) => {
     const [shouldFetch, setShouldFetch] = useState(true);
     const [useCachedData, setUseCachedData] = useState(false);
     const [cachedAllData, setCachedAllData] = useState<AllCachedData | null>(null);
+    const [timeStamp, setTimeStamp] = useState<number | null>(null);
 
     const cacheKey = getCacheKey(url);
 
     // Check cache on mount
     useEffect(() => {
         if (url) {
-            const cached = getCachedData<AllCachedData>(cacheKey);
-            if (cached) {
+            const cachedData = getCachedData<AllCachedData>(cacheKey);
+            if (cachedData) {
                 console.log('Loading data from cache for:', url);
-                setCachedAllData(cached);
+                setCachedAllData(cachedData.data);
                 setUseCachedData(true);
                 setShouldFetch(false);
+                setTimeStamp(cachedData.timestamp)
             } else {
                 console.log('No valid cache found, fetching fresh data for:', url);
                 setUseCachedData(false);
                 setShouldFetch(true);
+                setTimeStamp(Date.now())
             }
         }
     }, [url, cacheKey]);
@@ -232,6 +235,9 @@ export const useWebsiteData = (url: string) => {
         // Actions
         refetchData,
         refetchMobile: refetchData, // Keep compatibility with existing code
+
+        // timestamp
+        timeStamp
     };
 };
 
@@ -371,11 +377,11 @@ export const useSecurityData = (url: string) => {
             return;
         }
 
-        const fetchTrafficData = async () => {
+        const fetchSecurityData = async () => {
             try {
                 setSecurityLoading(true)
                 const response = await axios.post(`${API_BASE_URL}/security`, { url });
-                    const data = response.data.data;
+                    const data = response.data;
                     if(data){
                         setSecurityData(data);
                     }
@@ -387,7 +393,7 @@ export const useSecurityData = (url: string) => {
             }
         };
 
-        fetchTrafficData();
+        fetchSecurityData();
     }, [url]);
 
     return { securityData, securityLoading, securityError };
@@ -404,7 +410,7 @@ export const useSEOData = (url: string) => {
             return;
         }
 
-        const fetchTrafficData = async () => {
+        const fetchSeoData = async () => {
             try {
                 setSeoError(false)
                 setSeoLoading(true);
@@ -423,7 +429,7 @@ export const useSEOData = (url: string) => {
             }
         };
 
-        fetchTrafficData();
+        fetchSeoData();
     }, [url]);
 
     return { seoData, seoLoading, seoError };

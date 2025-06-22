@@ -1,12 +1,29 @@
 import React, { useState } from 'react';
 import { HelpCircle } from 'lucide-react';
 
+type TooltipKey =
+  | 'common_keywords'
+  | 'SEO_description'
+  | 'H1_contents'
+  | 'H2_contents'
+  | 'Image_ALT_Attributes'
+  | 'Keywords_in_Title_and_Description'
+  | 'Links_Ratio'
+  | 'SEO_Title'
+  | 'search_preview'
+  | 'mobile_search_preview'
+  | 'canonical_contents'
+  | 'noindex_description'
+  | 'checkcanonicalization'
+  | 'og_contents'
+  | 'robot_text_analytics';
+
 interface TooltipProps {
-  tooltipKey: string;
+  tooltipKey: TooltipKey;
   className?: string;
 }
 
-const tooltipContent = {
+const tooltipContent: Record<TooltipKey, string> = {
   common_keywords: "A list of keywords that appear frequently in the text of your content.",
   SEO_description: "SEO analysis of your page's meta-description.",
   H1_contents: "SEO Analysis of the H1 Tags on your page.",
@@ -15,7 +32,7 @@ const tooltipContent = {
   Keywords_in_Title_and_Description: "SEO analysis of the HTML page's Title and meta description content.",
   Links_Ratio: "SEO analysis of the ratio of internal links to external links.",
   SEO_Title: "SEO analysis of your site's HTML title.",
-    search_preview: "Here is how your site may appear in search results:",
+  search_preview: "Here is how your site may appear in search results:",
   mobile_search_preview: "Here is how your site may appear in search results:",
   canonical_contents: "Does your content have a \"canonical\" URL?",
   noindex_description: "Does your content contain a noindex robots meta tag?",

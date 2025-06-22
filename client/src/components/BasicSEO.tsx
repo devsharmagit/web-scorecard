@@ -1,9 +1,9 @@
-import { Loader2} from 'lucide-react';
 import { Tooltip } from './ui/Tooltop';
 import yesImageSrc from '../assets/yes.svg';
 import corssImageSrc from '../assets/cross.svg';
 import exclaimationImageSrc from '../assets/exclaimation.svg';
 import type { GenericSEOAnalysisResponse } from '../types/seo.type';
+import Loader from './ui/Loader';
 
 const prettifyKey = (key: string): string => {
     const knownAbbreviations = ['SEO', 'URL', 'API']; // Add more as needed
@@ -20,8 +20,7 @@ const prettifyKey = (key: string): string => {
 };
 
 
-
-const renderValue = ( value : any) => {
+const renderValue = ( value : any ) => {
     if (Array.isArray(value)) {
         if (value.length === 0) return null;
         return (
@@ -57,16 +56,13 @@ const BasicSEO = ({data:seoData, loading, isError}: BaiscSEOProps) => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center py-12">
-                <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
-                <span className="ml-2 text-gray-600">Analyzing basic SEO metrics...</span>
-            </div>
+            <Loader text='Loading Basic SEO data... ' />
         );
     }
     if(isError){
         return (
           <div className="text-center text-red-500 py-8">
-            Error fetching Mobile data.
+            Error fetching Basic SEO data.
           </div>
         );
       }
@@ -97,6 +93,7 @@ const BasicSEO = ({data:seoData, loading, isError}: BaiscSEOProps) => {
                             {/* Heading */}
                             <div className="md:flex-1 md:max-w-[200px] md:min-w-[200px] lg:min-w-[350px] text-sm font-semibold text-[#333] flex gap-2 items-center">
                                 {prettifyKey(key)}
+                                {/* @ts-ignore */}
                                 <Tooltip tooltipKey={key} />
                             </div>
                             
@@ -145,6 +142,7 @@ const BasicSEO = ({data:seoData, loading, isError}: BaiscSEOProps) => {
                                 <div className="flex-1 min-w-0 flex flex-col gap-1">
                                     <div className="text-[#333] text-sm ">{search_preview.message}</div>
                                     <div className="min-w-0 overflow-hidden">
+                                        {/* @ts-expect-error this works fine */}
                                         <div dangerouslySetInnerHTML={{ __html: search_preview.value }} />  
                                     </div>
                                 </div>
@@ -170,6 +168,7 @@ const BasicSEO = ({data:seoData, loading, isError}: BaiscSEOProps) => {
                                 <div className="flex-1 min-w-0 flex flex-col gap-1">
                                     <div className="text-[#333] text-sm ">{search_preview.message}</div>
                                     <div className="min-w-0 overflow-hidden">
+                                        {/* @ts-expect-error this works fine */}
                                         <div dangerouslySetInnerHTML={{ __html: search_preview.value }} />  
                                     </div>
                                 </div>

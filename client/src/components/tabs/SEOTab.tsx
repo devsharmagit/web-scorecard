@@ -1,9 +1,9 @@
 import type { PageSpeedData } from '../../types/pagespeed';
-import {Loader2 } from 'lucide-react';
 import { extractDesktopSEOData } from '../../lib/helper';
 import PassedDiagnostics from '../ui/PassedDiagnostics';
 import FailedDiagnostics from '../ui/FailedDiagnostics';
 import Grade from '../ui/Grade';
+import Loader from '../ui/Loader';
 
 interface SEOTabProps {
   data: PageSpeedData | null; // Allow data to be null initially
@@ -15,17 +15,14 @@ const SEOTab = ({ data, loading, isError }: SEOTabProps) => {
 
    if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
-        <span className="ml-2 text-gray-600">Analyzing SEO metrics...</span>
-      </div>
+      <Loader text='Loading SEO data ...' />
     );
   }
 
    if(isError){
     return (
       <div className="text-center text-red-500 py-8">
-        Error fetching Mobile data.
+        Error fetching SEO data.
       </div>
     );
   }

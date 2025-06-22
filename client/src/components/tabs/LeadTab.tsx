@@ -23,7 +23,7 @@ const LeadTab = ({leadData} : {loading : boolean, leadData : LeadDataType[]}) =>
             Leads Information
           </h1>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-gray-600 text-sm'>
-          {leadData.map((leadItem: any, index: number) => {
+          {leadData.map((leadItem: LeadDataType, index: number) => {
                         
             return (
               <div key={index} className="bg-white border border-[#799F92] rounded-md px-[15px] py-2.5 lg:p-6  flex flex-col justify-between">

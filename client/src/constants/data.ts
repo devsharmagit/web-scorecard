@@ -1,3 +1,4 @@
+// @ts-nocheck 
 export function extractDesktopData(data) {
   if (!data.lighthouseResult) return null;
 

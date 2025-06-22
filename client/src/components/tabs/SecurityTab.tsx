@@ -1,6 +1,7 @@
 import React from 'react';
 import Grade from '../ui/Grade';
 import type { SecurityCheck, SecurityDataType } from '../../types/security';
+import Loader from '../ui/Loader';
 
 interface SecurityTabProps {
   data: SecurityDataType | null
@@ -33,17 +34,14 @@ const SecurityTab: React.FC<SecurityTabProps> = ({ data, error, loading } : Secu
 
   if (loading) {
     return (
-      <div className="text-center py-8">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-        <p className="mt-2">Analyzing website security...</p>
-      </div>
+      <Loader text='Loading Security data ...' />
     );
   }
 
   if(error){
     return (
       <div className="text-center text-red-500 py-8">
-        Error fetching Mobile data.
+        Error fetching Security data.
       </div>
     );
   }
