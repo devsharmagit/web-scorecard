@@ -17,7 +17,7 @@ const FailedDiagnostics = ({failedDiagnostics}: {failedDiagnostics : DiagnosticE
                       Needs Improvement
                     </span>
                   </div>
-                  <p className="text-sm text-[#1F2F2F]">
+                  <p className="text-sm text-[#1F2F2F] break-words">
                     {diagnostic.description}
                   </p>
                   

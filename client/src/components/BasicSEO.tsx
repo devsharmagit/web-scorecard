@@ -24,7 +24,7 @@ const renderValue = ( value : any ) => {
     if (Array.isArray(value)) {
         if (value.length === 0) return null;
         return (
-            <div className="px-4 py-2 text-sm bg-black text-white overflow-x-auto max-w-full">
+            <div className="px-4 py-2 text-sm bg-black text-white overflow-x-auto max-w-full truncate">
                 {value.map((v, i: number) => (
                     <div key={i} className="">{String(v)}</div>
                 ))}
