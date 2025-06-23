@@ -67,7 +67,7 @@ const setCachedData = <T>(key: string, data: T): void => {
 
 // Main hook that manages all data with caching using individual hooks
 export const useWebsiteData = (url: string) => {
-    const [shouldFetch, setShouldFetch] = useState(true);
+    const [shouldFetch, setShouldFetch] = useState(false);
     const [useCachedData, setUseCachedData] = useState(false);
     const [cachedAllData, setCachedAllData] = useState<AllCachedData | null>(null);
     const [timeStamp, setTimeStamp] = useState<number | null>(null);
