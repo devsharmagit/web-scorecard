@@ -422,7 +422,7 @@ export const useSEOData = (url: string) => {
             try {
                 setSeoError(false)
                 setSeoLoading(true);
-                const response = await axios.get('http://localhost:3000/getSEOData', {
+                const response = await axios.get(`${API_BASE_URL}/getSEOData`, {
                     params: { url }
                 });
                 if (response.status !== 200) {
