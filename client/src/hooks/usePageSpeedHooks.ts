@@ -8,11 +8,15 @@ import type { SecurityDataType } from '../types/security';
 import type { GenericSEOAnalysisResponse } from '../types/seo.type';
 const mode = import.meta.env.PROD;
 
+console.log(mode)
+
 // Constants
 let API_BASE_URL = 'http://localhost:3000';
 if(mode === true){
     API_BASE_URL = 'https://web-scorecard-server.onrender.com'
 }
+
+console.log(API_BASE_URL)
 
 const ELITE_PLAN_NAME = 'Growth Elite';
 const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
