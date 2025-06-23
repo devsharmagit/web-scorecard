@@ -13,6 +13,7 @@ import { getTabButtonClasses, TABS, type TabId } from '../constants/tab';
 import { formatDate } from '../constants/date';
 import html2canvas from 'html2canvas-pro';
 import jsPDF from 'jspdf';
+import Loader from './ui/Loader';
 
 interface PageSpeedResultsProps {
     url: string;
@@ -232,6 +233,10 @@ const generatePDF = async () => {
 };
 
     const isDataLoading = mobileLoading || desktopLoading || seoLoading || securityLoading || trafficLoading || leadLoading;
+
+    if(isMainResultLoading){
+        return <Loader text='Loading data...'  />
+    }
 
     return (
         <div className="">
