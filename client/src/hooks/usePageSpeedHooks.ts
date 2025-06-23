@@ -6,9 +6,14 @@ import type { LeadDataType } from '../types/lead.type';
 import type { TrafficDataType } from '../types/traffic.type';
 import type { SecurityDataType } from '../types/security';
 import type { GenericSEOAnalysisResponse } from '../types/seo.type';
+const mode = import.meta.env.PROD;
 
 // Constants
-const API_BASE_URL = 'http://localhost:3000';
+let API_BASE_URL = 'http://localhost:3000';
+if(mode === true){
+    API_BASE_URL = 'https://web-scorecard-server.onrender.com'
+}
+
 const ELITE_PLAN_NAME = 'Growth Elite';
 const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
@@ -79,7 +84,6 @@ export const useWebsiteData = (url: string) => {
         if (url) {
             const cachedData = getCachedData<AllCachedData>(cacheKey);
             if (cachedData) {
-                console.log('Loading data from cache for:', url);
                 setCachedAllData(cachedData.data);
                 setUseCachedData(true);
                 setShouldFetch(false);

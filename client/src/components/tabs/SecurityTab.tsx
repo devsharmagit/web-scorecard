@@ -11,8 +11,6 @@ interface SecurityTabProps {
 
 const SecurityTab: React.FC<SecurityTabProps> = ({ data, error, loading } : SecurityTabProps) => {
 
-  console.log({data, error, loading})
-
   const score = data?.data_desktop_security?.score || 0;
   const passed = data?.data_desktop_security?.passed || [];
   const failed = data?.data_desktop_security?.failed || [];
