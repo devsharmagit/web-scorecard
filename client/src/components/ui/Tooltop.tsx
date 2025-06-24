@@ -63,7 +63,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ tooltipKey, className = '' }) 
       />
       
       <div 
-        className={`absolute bottom-full left-1/2 pointer-events-none transition-opacity duration-300 ease-in-out ${
+        className={`absolute z-10 bottom-full left-1/2 pointer-events-none transition-opacity duration-300 ease-in-out ${
           isVisible ? 'opacity-100' : 'opacity-0'
         }`}
         style={{

@@ -85,7 +85,7 @@ const BasicSEO = ({data:seoData, loading, isError}: BaiscSEOProps) => {
     return (
         <div className="space-y-6">
             <h2 className="text-xl font-semibold mb-2 text-center">Basic SEO</h2>
-            <div className="bg-[#F0F4F8] rounded-lg border border-[#799F92] overflow-hidden">
+            <div className="bg-[#F0F4F8] rounded-lg border border-[#799F92] ">
                 {Object.entries(basicSEO).map(([key, { value, message, valid }], idx) => (
                     <div key={key} className={`px-4 py-5 ${idx !== 0 && "border-t border-[#D9E2EC]"}`}>
                         {/* Mobile: Column layout, MD+: Row layout */}
@@ -123,7 +123,7 @@ const BasicSEO = ({data:seoData, loading, isError}: BaiscSEOProps) => {
                 ))}
             </div>
             <h2 className="text-xl font-semibold mb-2 text-center">Advance SEO</h2>
-            <div className="bg-[#F0F4F8] rounded-lg border border-[#799F92] overflow-hidden">
+            <div className="bg-[#F0F4F8] rounded-lg border border-[#799F92] ">
                 <div className="px-4 py-5">
                     <div className="flex flex-col md:flex-row md:items-start gap-4">
                         <div className="md:min-w-[350px] text-sm font-semibold text-[#333] flex gap-2 items-center">

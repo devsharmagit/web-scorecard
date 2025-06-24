@@ -85,7 +85,7 @@ const InputForm = ({urlInput, setUrlInput, handleAnalyze}: InputFormProps) => {
         <div className="relative">
        <form onSubmit={handleButtonClick}>
           <input
-            type="url"
+            type="text"
             value={urlInput}
             onChange={handleUrlChange}
             placeholder="Enter a web page URL here"

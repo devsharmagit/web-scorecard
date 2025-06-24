@@ -9,9 +9,10 @@ interface SEOTabProps {
   data: PageSpeedData | null; // Allow data to be null initially
   loading?: boolean;
   isError: boolean
+   isEliteClient: boolean;
 }
 
-const SEOTab = ({ data, loading, isError }: SEOTabProps) => {
+const SEOTab = ({ data, loading, isError ,isEliteClient }: SEOTabProps) => {
 
    if (loading) {
     return (
@@ -51,7 +52,7 @@ const SEOTab = ({ data, loading, isError }: SEOTabProps) => {
           score={score}
           title="Search Engine Optimization Score"
           showButton={true}
-          isEliteClient={false} // Assuming this is not needed for SEO tab
+          isEliteClient={isEliteClient} 
         />      
       </div>
 

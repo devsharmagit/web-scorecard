@@ -321,7 +321,7 @@ const generatePDF = async () => {
                 {/* SEO Tab */}
                 <div className={activeTab === 'seo' ? 'block' : 'hidden'}>
                     <div ref={seoTabRef}>
-                        <SEOTab data={desktopData} loading={desktopLoading} isError={desktopError} />
+                        <SEOTab isEliteClient={isEliteClient} data={desktopData} loading={desktopLoading} isError={desktopError} />
                         <BasicSEO data={seoData} isError={seoError} loading={seoLoading} />
                     </div>
                 </div>
@@ -376,7 +376,7 @@ const generatePDF = async () => {
 
                 {/* SEO content for PDF */}
                 <div ref={seoTabRef} style={{ width: '800px', backgroundColor: 'white', padding: '20px' }}>
-                    <SEOTab data={desktopData} loading={false} isError={desktopError} />
+                    <SEOTab isEliteClient={isEliteClient} data={desktopData} loading={false} isError={desktopError} />
                     <BasicSEO data={seoData} isError={seoError} loading={false} />
                 </div>
 
