@@ -330,7 +330,7 @@ const generatePDF = async () => {
                 {trafficData && (
                     <div className={activeTab === 'traffic' ? 'block' : 'hidden'}>
                         <div ref={trafficTabRef}>
-                            <TrafficTab trafficData={trafficData} loading={trafficLoading} isError={trafficError} />
+                            <TrafficTab isEliteClient={isEliteClient} trafficData={trafficData} loading={trafficLoading} isError={trafficError} />
                         </div>
                     </div>
                 )}
@@ -383,7 +383,7 @@ const generatePDF = async () => {
                 {/* Traffic content for PDF */}
                 {trafficData && (
                     <div ref={trafficTabRef} style={{ width: '800px', backgroundColor: 'white', padding: '20px' }}>
-                        <TrafficTab trafficData={trafficData} loading={false} isError={trafficError} />
+                        <TrafficTab isEliteClient={isEliteClient} trafficData={trafficData} loading={false} isError={trafficError} />
                     </div>
                 )}
 

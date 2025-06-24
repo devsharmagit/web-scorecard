@@ -57,7 +57,8 @@ const InputForm = ({urlInput, setUrlInput, handleAnalyze}: InputFormProps) => {
     }
   };
   
-  const handleButtonClick = () => {
+  const handleButtonClick = (e : React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     const validation = validateUrl(urlInput);
     
     if (validation.isValid) {
@@ -82,6 +83,7 @@ const InputForm = ({urlInput, setUrlInput, handleAnalyze}: InputFormProps) => {
       <div className="max-w-xl mx-auto text-center">
         <img src={dashboarImg} alt="Dashboard" className="w-[90px] h-[90px] mx-auto mb-4" />
         <div className="relative">
+       <form onSubmit={handleButtonClick}>
           <input
             type="url"
             value={urlInput}
@@ -94,18 +96,20 @@ const InputForm = ({urlInput, setUrlInput, handleAnalyze}: InputFormProps) => {
           {urlError && (
             <p className="text-red-500 text-xs mt-1 text-left">{urlError}</p>
           )}
-        </div>
+        
         <p className="text-sm text-black font-semibold mt-4">
           Unlock valuable insights into your website's performance with our comprehensive analytics report. 
           Monitor key metrics such as page load speed, SEO score, traffic sources, and user engagement.
         </p>
 
         <button
-          onClick={handleButtonClick}
+          type='submit'
           className={`mt-6 font-semibold py-2 px-6 rounded-full transition-all duration-200 text-xs mx-auto bg-[#1F2F2F] hover:bg-[#799f92] hover:shadow-2xl text-white cursor-pointer`}
         >
           CLICK HERE FOR SCORECARD!
         </button>
+       </form>
+        </div>
       </div>
     </div>
   )

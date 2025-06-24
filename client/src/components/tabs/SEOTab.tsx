@@ -50,7 +50,7 @@ const SEOTab = ({ data, loading, isError }: SEOTabProps) => {
           description="Measures the effectiveness of your website’s optimization for search engines, impacting visibility and organic traffic generation."
           score={score}
           title="Search Engine Optimization Score"
-          showButton={false}
+          showButton={true}
           isEliteClient={false} // Assuming this is not needed for SEO tab
         />      
       </div>

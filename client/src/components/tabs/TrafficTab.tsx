@@ -1,14 +1,16 @@
 import type { TrafficDataType } from '../../types/traffic.type';
+import ImproveWebsiteButton from '../ui/ImproveWebsiteButton';
 import TrendBadge from '../ui/TrendBadge';
 
 
 interface TrafficTabProps {
   trafficData: TrafficDataType ,
   loading: boolean,
-  isError: boolean
+  isError: boolean,
+  isEliteClient: boolean;
 }
 
-function TrafficTab({ trafficData, isError }: TrafficTabProps) {
+function TrafficTab({ trafficData, isError, isEliteClient }: TrafficTabProps) {
   
   if(isError){
     return (
@@ -93,6 +95,7 @@ function TrafficTab({ trafficData, isError }: TrafficTabProps) {
             <p className="text-[#1F2F2F] text-sm max-w-xl text-center">
               Reflects the volume of visitors to your website, providing insight into its online reach and audience engagement.
             </p>
+            {!isEliteClient && <ImproveWebsiteButton />}
           </div>
         </div>
       </div>
