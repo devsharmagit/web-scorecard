@@ -34,9 +34,9 @@ const MainResult = ({
                         <div className="text-base font-semibold text-gray-900">{url}</div>
 
                         <div className="text-2xl font-medium ">
-                            This site is{' '}
+                            This site {(ratingStatus === "Excellent" || ratingStatus === "Good") && "is" }
                             <span className="font-bold text-[#799F92]">
-                                {ratingStatus}
+                                {ratingStatus}.
                             </span>
                         </div>
                         <div className="text-base font-semibold leading-[1.2]">

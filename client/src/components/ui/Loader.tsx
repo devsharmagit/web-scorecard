@@ -1,14 +1,14 @@
-import { Loader2 } from 'lucide-react'
-
 interface LoaderProps {
     text?: string
 }
 
 const Loader = ({text} : LoaderProps) => {
   return (
-    <div className="flex items-center justify-center py-12">
-        <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
-        <span className="ml-2 text-gray-600">{text ? text : "Loading..." }</span>
+    <div className="flex flex-col gap-2  items-center justify-center py-12">
+        <img className="h-[72px] w-[72px] object-center object-cover" src='/loader.gif' />
+        <p className="text-sm font-semibold text-center">
+        {text ? text :  "We’re on it! Thanks for requesting your website scorecard, please check back in a few minutes."}  
+        </p>
       </div>
   )
 }

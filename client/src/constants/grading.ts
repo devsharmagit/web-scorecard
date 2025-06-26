@@ -17,7 +17,7 @@ export  const getGrade = (score: number) => {
 export  const getRatingStatus = (score: number) => {
     if (score >= 80) return 'Excellent';
     if (score >= 50) return 'Good';
-    return 'Bad';
+    return 'Needs Improvement';
   };
 
 export   const getGradeColor = (grade: string) => {

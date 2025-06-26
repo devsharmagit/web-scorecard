@@ -443,19 +443,25 @@ export const useSEOData = (url: string) => {
     return { seoData, seoLoading, seoError };
 };
 
-export const useAverageScore = (mobileData: PageSpeedData | null, desktopData: PageSpeedData | null) => {
+export const useAverageScore = (mobileData: PageSpeedData | null, desktopData: PageSpeedData | null, securityData: SecurityDataType | null) => {
     const [avgScore, setAvgScore] = useState<number>(0);
 
     useEffect(() => {
-        if (mobileData && desktopData) {
+        if (mobileData && desktopData && securityData) {
             const mobileScore = mobileData.lighthouseResult.categories.performance.score * 100;
             const desktopScore = desktopData.lighthouseResult.categories.performance.score * 100;
             const seoScore = mobileData.lighthouseResult.categories.seo.score * 100;
+            const securityScore = securityData?.data_desktop_security.score
 
-            const average = (mobileScore + desktopScore + seoScore) / 3;
+            const average = (mobileScore + desktopScore + seoScore + securityScore) / 4;
             setAvgScore(average);
+            console.log("mobile score : ", mobileScore);
+            console.log("desktop score : ", desktopScore);
+            console.log("seo score : ", seoScore);
+            console.log("security score : ", securityScore)
+            console.log("average score : ", average)
         }
-    }, [mobileData, desktopData]);
+    }, [mobileData, desktopData, securityData]);
 
     return avgScore;
 };

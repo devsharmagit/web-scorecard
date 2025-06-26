@@ -43,8 +43,8 @@ const PageSpeedResults: React.FC<PageSpeedResultsProps> = ({ url }) => {
         isEliteClient, timeStamp, refetchData
     } = useWebsiteData(url)
 
-    const avgScore = useAverageScore(mobileData, desktopData);
-    const isMainResultLoading = mobileLoading || desktopLoading;
+    const avgScore = useAverageScore(mobileData, desktopData, securityData);
+    const isMainResultLoading = mobileLoading || desktopLoading || securityLoading;
 
 const generatePDF = async () => {
     setIsGeneratingPDF(true);
@@ -235,7 +235,7 @@ const generatePDF = async () => {
     const isDataLoading = mobileLoading || desktopLoading || seoLoading || securityLoading || trafficLoading || leadLoading;
 
     if(isMainResultLoading){
-        return <Loader text='Loading data...'  />
+        return <Loader  />
     }
 
     return (
@@ -253,7 +253,7 @@ const generatePDF = async () => {
                                 onClick={()=>refetchData()} 
                                 className='text-blue-500 underline hover:cursor-pointer'
                             >
-                                {' '}(Refresh Data)
+                                (Refresh Data)
                             </span>
                         </p>
                     )}
