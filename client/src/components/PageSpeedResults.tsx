@@ -248,12 +248,12 @@ const generatePDF = async () => {
                     </h2>
                     {timeStamp && (
                         <p className='text-sm text-gray-900'>
-                            Last Update at: {formatDate(timeStamp)}
+                            Last Update at: {formatDate(timeStamp)} {" "}
                             <span 
                                 onClick={()=>refetchData()} 
                                 className='text-blue-500 underline hover:cursor-pointer'
                             >
-                              {" "}  (Refresh Data)
+                                (Refresh Data)
                             </span>
                         </p>
                     )}
