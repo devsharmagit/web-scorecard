@@ -253,7 +253,7 @@ const generatePDF = async () => {
                                 onClick={()=>refetchData()} 
                                 className='text-blue-500 underline hover:cursor-pointer'
                             >
-                                (Refresh Data)
+                              {" "}  (Refresh Data)
                             </span>
                         </p>
                     )}

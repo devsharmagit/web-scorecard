@@ -8,4 +8,13 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  server: {
+    fs: {
+      // Allow serving files from anywhere
+      strict: false
+    },
+    // Alternative: disable file serving restrictions entirely
+    // cors: true,
+    // origin: 'http://localhost:5173'
+  }
 })
